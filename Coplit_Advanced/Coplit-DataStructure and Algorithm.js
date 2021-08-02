@@ -39,3 +39,5 @@ const rockPaperScissors = function (num) {
   let result = howManyWays(num);
   return result;
 };
+
+//ㅇㅇ
