@@ -40,5 +40,38 @@ const rockPaperScissors = function (num) {
   return result;
 };
 
-//ㅇㅇ
-//dd
+//2
+
+function fibonacci(n, memo = [0, 1]) {
+  if (memo[n] !== undefined) {
+    // if(memo[n]){
+    return memo[n];
+  } else {
+    memo[n] = fibonacci(n - 1, memo) + fibonacci(n - 2, memo);
+    return memo[n];
+  }
+}
+//2번에 왜  if(memo[n]!==undefined){ 이거는 돌아가고  if(memo[n]){ 이거면 맥시멈 콜?
+
+// function fibonacci(n, memo=[]) {
+//   // let memo = [];
+//   if(memo[n]){
+//     return memo[n];
+//   }
+//   else{
+//     if(n===0){
+//     memo[n] = 0;
+//     return memo[n];
+
+//     } else if (n <= 2){
+//     memo[n] = 1
+//     return memo[n];
+
+//     } else{
+//       if(!memo[n]){
+//         memo[n] = fibonacci(n-1, memo) + fibonacci(n-2, memo);
+//         return memo[n]
+//       }
+//     }
+//   }
+// }
