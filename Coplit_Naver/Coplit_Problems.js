@@ -37,6 +37,84 @@ let isIsogram = function (str) {
   return true;
 };
 
+//Q4
+function runLength(str) {
+  //전이랑 같은 글자면 숫자+1에 알파벳
+  //전이랑 다른 글자면 그 다음에 더해지게끔?
+  let result = "";
+  let count = 1;
+  for (let i = 0; i < str.length; i++) {
+    //전 글자랑 다른 경우
+    if (str[i] !== str[i - 1]) {
+      count = 1;
+      result = result + count + str[i];
+    } else {
+      //전 글자랑 똑같은 경우
+      count++;
+      result = result.slice(0, result.length - 2) + count + str[i];
+    }
+  }
+  return result;
+}
+
+//Q5
+function findMissingNumber(str) {
+  str = str.split(" ").sort((a, b) => a - b);
+  for (let i = 1; i <= str.length; i++) {
+    if (i !== Number(str[i - 1])) {
+      return i;
+    }
+  }
+}
+
+//Q6
+const binarySearch = function (arr, target) {
+  let left = 0,
+    right = arr.length - 1;
+
+  while (left <= right) {
+    let middle = parseInt((left + right) / 2);
+    if (arr[middle] === target) {
+      return middle;
+    }
+    if (target < arr[middle]) {
+      right = middle - 1;
+    } else {
+      left = middle + 1;
+    }
+  }
+  return null;
+};
+
+//Q7
+//더 공부해야할 듯
+
+//Q8
+const balancedParens = function (str) {
+  const stack = [];
+  const opener = {
+    "{": "}",
+    "[": "]",
+    "(": ")",
+  };
+  const closer = "}])";
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] in opener) {
+      stack.push(str[i]);
+    } else if (closer.includes(str[i])) {
+      const top = stack.pop();
+      const pair = opener[top];
+      if (pair !== str[i]) {
+        return false;
+      }
+    }
+  }
+  return stack.length === 0;
+};
+
+//Q9
+
 //레퍼런스
 // function isIsogram(str) {
 //   if(str.length === 0) {
