@@ -185,3 +185,189 @@ class Tree {
     return false;
   }
 }
+
+//Q10 그래프 인접 행렬 생성하기
+function createMatrix(edges) {
+  // let numArr = edges.reduce(function(acc,cur){
+  //   return acc.concat(cur)
+  // }).filter(function(el){
+  //   return !isNaN(el)
+  // })
+  //  위의 식을 화살표 함수로 줄인것. 메소드를 쓰면 메소드 안의 내용을 다 ()소괄호 안에 넣어줘야되네.
+  let numArr = edges
+    .reduce((acc, cur) => acc.concat(cur))
+    .filter((el) => !isNaN(el));
+  let maxNum = Math.max(...numArr);
+  // 매개 변수로 주어진 edges의 배열을 리듀스로 concat해서 한 배열로 만들고
+  // 필터를 적용시켜서 숫자만 골라낸다.
+  // 매스맥스로 가장 큰 숫자를 maxNum에 할당한다.
+
+  let arr = [];
+  for (let n = 0; n <= maxNum; n++) {
+    function makeArr() {
+      for (let i = 0; i < arr.length; i++) {
+        arr[i].push(0);
+      }
+      arr.push(new Array(arr.length + 1).fill(0));
+    }
+    makeArr();
+  }
+  // 앞서 maxNum으로 가장 큰 숫자를 구했으므로 그걸 통해서 2차원 배열을 만든다.
+  // 가장 큰 숫자는 idx값이므로 매트릭스를 만들땐 maxNum+1으로 만들어야한다.
+  // 예를 들어 인덱스5번은 결국 6번째이기 때문이다.
+
+  for (let j = 0; j < edges.length; j++) {
+    arr[edges[j][0]][edges[j][1]] = 1;
+    if (edges[j][2] === "undirected") {
+      arr[edges[j][1]][edges[j][0]] = 1;
+    }
+  }
+  // edges길이만큼 반복문을 돌면서 edges의 배열 0번 1번 인덱스의 값에 해당하는 매트릭스에 1, 0표시하고
+  // 쌍방인지 일방인지 확인해서 데칼코마니처럼 표시하던지 아니면 한쪽만 표시하던지 한다.
+  //
+  return arr;
+}
+
+//Q11 그래프 인접 행렬 길찾기
+function getDirections(matrix, from, to) {
+  let queue_ToVisit = [from]; //시작 지점
+  let queue_AddList = (vertex) => queue_ToVisit.push(vertex);
+  let queue_DeList = () => queue_ToVisit.shift();
+  let isVisited = new Array(matrix.length).fill(false);
+
+  while (queue_ToVisit.length > 0) {
+    let landed_justNow = queue_DeList();
+    if (landed_justNow === to) {
+      return true;
+    }
+
+    for (let next = 0; next < matrix[landed_justNow].length; next++) {
+      if (matrix[landed_justNow][next] && !isVisited[next]) {
+        queue_AddList(next);
+        isVisited[landed_justNow] = true;
+      }
+    }
+  }
+  return false;
+}
+
+//Q13 [DFS / BFS] 연결된 정점들
+function connectedVertices(edges) {
+  //우선 매트릭스를 만들기 위해서 가장 큰 수를 찾는다.
+  let maxNum = 0;
+  for (let i = 0; i < edges.length; i++) {
+    if (maxNum < edges[i][0]) {
+      maxNum = edges[i][0];
+    }
+    if (maxNum < edges[i][1]) {
+      maxNum = edges[i][1];
+    }
+  }
+
+  //가장 큰 수로 매트릭스를 만든다.
+  let matrix = Array(maxNum + 1)
+    .fill(0)
+    .map((el) => Array(maxNum + 1).fill(0));
+  //매트릭스에 간선을 만들어준다.
+  for (let j = 0; j < edges.length; j++) {
+    matrix[edges[j][0]][edges[j][1]] = 1;
+    matrix[edges[j][1]][edges[j][0]] = 1;
+  }
+
+  //간선을 확인해준다.
+  //정점을 찍고 간 경우 체크해준다.
+  let count = 0;
+  let isVisited = Array(matrix.length).fill(false);
+  for (let n = 0; n <= maxNum; n++) {
+    if (isVisited[n] === false) {
+      checking(n);
+      count++;
+    }
+  }
+
+  function checking(vertex) {
+    isVisited[vertex] = true;
+    for (let e = 0; e < matrix[vertex].length; e++) {
+      if (matrix[vertex][e] === 1) {
+        if (isVisited[e] === false) {
+          checking(e);
+        }
+      }
+    }
+  }
+  return count;
+}
+
+// 다른 풀이
+function connectedVertices(edges) {
+  let maxNum = 0; // 정점의 개수 구하는 식
+  for (let i = 0; i < edges.length; i++) {
+    if (edges[i][0] > maxNum) {
+      maxNum = edges[i][0];
+    }
+    if (edges[i][1] > maxNum) {
+      maxNum = edges[i][1];
+    }
+  } //인덱스 0번 1번 돌면서 큰 수 할당
+
+  let obj = {};
+  for (let u = 0; u <= maxNum; u++) {
+    obj[u] = [];
+  } //앞에서 구한 정점 개수 만큼 인접리스트를 넣을 객체를 생성해준다.
+
+  for (let n = 0; n < edges.length; n++) {
+    obj[edges[n][0]].push(edges[n][1]); //obj 빈 객체에
+    obj[edges[n][1]].push(edges[n][0]);
+  } // [2,3]을 예로 들면 2에는 3을 넣어주고 3에는 2를 넣어주는 식
+
+  let isVisited = {};
+  let count = 0;
+  for (let vertex = 0; vertex <= maxNum; vertex++) {
+    //정점 0에서 5까지 넣어준다.
+    if (isVisited[vertex] === undefined) {
+      //정점에 방문한 기록이 없으면
+      findIfItsVisited(vertex); // 함수에 정점을 넣어준다.
+      count++;
+    }
+  }
+  function findIfItsVisited(vertecs) {
+    isVisited[vertecs] = 1;
+    for (let m = 0; m < obj[vertecs].length; m++) {
+      if (!isVisited[obj[vertecs][m]]) {
+        findIfItsVisited(obj[vertecs][m]);
+      }
+    }
+  }
+  return count;
+}
+
+//Q14 DFS 바코드
+function barcode(len) {
+  let aux = function (str) {
+    if (str.length === len) {
+      return str;
+    }
+
+    for (let i = 1; i <= 3; i++) {
+      if (isValid(str + i)) {
+        let result = aux(str + i);
+        if (result !== null) return result;
+      }
+    }
+    return null;
+  };
+
+  let isValid = function (str) {
+    let reversed = str.split("").reverse().join("");
+    let half = Math.floor(reversed.length / 2);
+
+    for (let j = 1; j <= half; j++) {
+      if (reversed.slice(0, j) === reversed.slice(j, j + j)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  return aux("");
+}
