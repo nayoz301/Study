@@ -129,3 +129,20 @@ function getGCD(m, n) {
   if (m % n === 0) return n;
   return gcd(n, m % n);
 }
+
+//매트릭스 만들기 (1)
+let maxNum = 5; 
+let matrix = new Array(maxNum+1).fill(0).map(el=>Array(maxNum+1).fill(0)); //maxNum+1 하는 이유는 매트릭스 만들 때 index 5인 경우 실제로는 6번째이기 떄문이다.
+
+//매트릭스 만들기 (2)
+let maxNum = 5;
+let arr = []
+  for(let n = 0; n <= maxNum; n++ ){
+    function makeArr(){
+      for(let i = 0; i<arr.length;i++){
+        arr[i].push(0);
+      }
+      arr.push(new Array(arr.length+1).fill(0));
+    }
+    makeArr();
+  }
