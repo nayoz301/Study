@@ -94,20 +94,27 @@ function browserStack(actions, start) {
 
 //Q5 프린터
 function queuePrinter(bufferSize, capacities, documents) {
+  //버퍼사이즈 작업 목록 최대 갯수, 캐파 작업 가능 용량, 도큐먼츠 각 도큐 용량 및 총 갯수
+  // 이 문제에서 헷갈렸던 점이 캐파가 충분하다고 작업 목록에 추가되도 바로 인쇄되기 전 상태가 되는 것이 아니라
+  // 큐의 길이가 작업 목록 최대 갯수라서 unshift로 idx0에 들어가서 큐 길이만큼 초를 세면서 idx순으로 마지막 끝으로 가야 그 다음에 pop()으로 빼내서 작업에 들어가는 구조이다.
+  // 그래서 1초마다 큐 안의 엘리먼트가 unshift로 앞에서 하나 차고 뒤에서 하나 빠지는 식으로 나간다.
+  // 뒤에서 빠지는 엘리먼트의 값 만큼 토탈버퍼볼륨에서 빼줘서 한 번에 프린터가 수용할 수 있는 문서 크기의 총합을 조정해나간다.
+  // 그리고 앞에서 unshift되는 자료의 값만큼 토탈버퍼볼륨에 더해준다.
+  // 만약에 토탈버퍼볼륨이 캐파보다 크게 될 경우엔 큐에 unshift하지 말고 도큐먼트 앞에서 빼준 것을 도로 도큐먼트에 unshift해서 순서가 꼬이는 걸 막아준다.
+
   let count = 0;
   let queue = [];
   let totalBufferVolume = 0;
 
-  // queue에 bufferSize만큼 0을 삽입합니다. (queue에 들어갈 요소의 고정 갯수를 만들어 주는 과정입니다.)
+  // queue에 작업 최대 갯수 만큼 큐에 0을 넣어준다. 큐에 들어갈 고정 갯수를 만들어줌.
   for (let i = 0; i < bufferSize; i++) {
     queue.push(0);
   }
 
-  // ~23번째 줄까지의 코드는 프린터를 처음 실행했을 때를 다룹니다.
-  // documents 배열에서 제일 앞의 있는 요소를 하나 빼내 currentDocument에 할당합니다.
+  // documents 배열에서 제일 앞의 있는 요소를 하나 빼내 currentDocument에 할당한다.
   let currentDocument = documents.shift();
 
-  // queue의 제일 앞에 currnetDocument를 삽입하고, 제일 마지막 요소를 없앱니다.
+  // queue의 제일 앞에 currnetDocument를 삽입하고 마지막 0을 없애서 만들어놓은 버퍼사이즈를 유지시켜 준다.
   queue.unshift(currentDocument);
   queue.pop();
 
@@ -119,21 +126,21 @@ function queuePrinter(bufferSize, capacities, documents) {
 
   // totalBufferVolume(총 용량)가 0이 될 때까지 반복합니다.
   while (totalBufferVolume) {
-    // totalBufferVolume(총 용량)에 queue에 있는 마지막 요소의 용량을 제거합니다.
+    // totalBufferVolume(총 용량)에 queue에 있는 마지막 요소의 용량을 제거한다.
     totalBufferVolume = totalBufferVolume - queue.pop();
 
-    // documents 배열에서 제일 앞의 있는 요소를 하나 빼내 currentDocument에 할당합니다.
+    // documents 배열에서 제일 앞의 있는 요소를 하나 빼내 currentDocument에 할당.
     currentDocument = documents.shift();
 
     // 만약 현재 문서와 총 용량을 더했을 때, 최대 용량(capacities)보다 작거나 같다면
     if (currentDocument + totalBufferVolume <= capacities) {
-      // queue에 currentDocument를 삽입하고 totalBufferVolume(총 용량)에 currentDocument 용량을 추가합니다.
+      // queue에 currentDocument를 삽입하고 totalBufferVolume(총 용량)에 currentDocument 용량을 추가한다.
       queue.unshift(currentDocument);
       totalBufferVolume = totalBufferVolume + currentDocument;
 
       // 만약 현재 문서와 총 용량을 더했을 때, 최대 용량(capacities)보다 크다면
     } else {
-      // 다시 documents에 currentDocument를 집어넣고 queue에는 0을 삽입합니다.
+      // 다시 documents에 currentDocument를 집어넣고 queue에는 0을 삽입.
       documents.unshift(currentDocument);
       queue.unshift(0);
     }
