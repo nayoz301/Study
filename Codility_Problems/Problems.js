@@ -128,3 +128,24 @@ function solution(A) {
 
   return globalMaxSum;
 }
+
+//코드스테이츠 레퍼런스
+function solution(A) {
+  // write your code in JavaScript (Node.js 8.9.4)
+  let max = A[0];
+  // D[i]: 인덱스 i에서 끝나는 연속 구간의 최대합 (A[i]를 포함한다)
+  // D[0]: 인덱스 0에서 끝나는 연속 구간은 A[0] 뿐!
+  const D = [A[0]];
+  for (let i = 1; i < A.length; i++) {
+    // D[1]부터 생각하면,
+    // D[i]에 대해서
+    // 그 이전의 요소를 마지막으로 하는 구간의 최대합 즉, D[i - 1]이 이미 계산되어 있다.
+    // 따라서 D[i]는 아래 둘 중 하나이다.
+    //  1) D[i - 1]에 A[i]를 이어 붙이거나 (A[i]를 이어 붙여서 이득인 경우, 즉 D[i - 1]이 양수인 경우
+    //  2) A[i] 혼자로만 구성. (D[i - 1]이 음수여서 굳이 필요 없는 경우)
+    if (D[i - 1] + A[i] > A[i]) D[i] = D[i - 1] + A[i];
+    else D[i] = A[i];
+    max = Math.max(max, D[i]);
+  }
+  return max;
+}
