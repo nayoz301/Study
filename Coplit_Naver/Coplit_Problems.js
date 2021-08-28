@@ -240,3 +240,265 @@ function test3(arr) {
   }
   return arr[arr.length - 1] + 1;
 }
+
+//Q31
+function encodingVideo(encodings, speeds) {
+  //문제 이해를 못해서 오래걸림
+  //인코딩 배열에 숫자는 현재 얼마나 인코딩 되었는지 퍼센트를 나타내는 것임
+  //스피드는 한 시간에 몇 퍼센트가 진행되는 지를 나타내는 것임
+  //앞에서부터 차례로 업로드 되지만 인코딩은 동시에 되므로
+  //완료가 된 경우 맨 앞의 파일이 업로드될 때 같이 업로드 된다.
+
+  let time = [];
+  for (let i = 0; i < speeds.length; i++) {
+    time.push((100 - encodings[i]) / speeds[i]);
+  }
+  let max = time.shift();
+  let count = 1;
+  let result = [];
+  while (time.length > 0) {
+    let thisNum = time.shift();
+    if (max >= thisNum) {
+      count++;
+    } else {
+      result.push(count);
+      count = 1;
+      max = thisNum;
+    }
+  }
+  result.push(count);
+  return result;
+}
+
+//코드스테이츠 레퍼런스
+function encodingVideo(encodings, speeds) {
+  // 업로드 마다 몇 개의 비디오가 업로드 되는지 담아줄 배열 result
+  let result = [];
+  let hours = 1;
+  // 업로드 되는 비디오의 수
+  let count = 0;
+  // 현재 비디오의 인코딩 진행률
+  let encoding = 0;
+
+  // 모든 비디오가 다 업로드 될때까지 반복합니다.
+  while (encodings[0]) {
+    encoding = encodings[0] + speeds[0] * hours;
+    // 첫 번째 비디오의 인코딩 진행률이 100이상인 경우
+    if (encoding >= 100) {
+      // 업로드 완료된 비디오의 갯수를 증가 시켜줍니다.
+      count++;
+      // 업로드가 완료된 비디오는 큐에서 제거합니다.
+      encodings.shift();
+      // 업로드가 완료된 인코딩 속도는 큐에서 제거합니다.
+      speeds.shift();
+    }
+    // 첫 번째 비디오의 인코딩 진행률이 100 미만일 경우
+    else {
+      // 업로드된 비디오가 있다면 result에 push 합니다.
+      if (count > 0) {
+        result.push(count);
+      }
+      // 업로드 시간이 증가됩니다.
+      //(업로드는 한시간에 한번만 가능하기 때문입니다.)
+      hours++;
+      // 업로드 완료된 비디오의 개수 초기화
+      //(업로드는 한시간에 한번만 가능하기 때문입니다.)
+      count = 0;
+    }
+  }
+  // 모든 비디오가 업로드가 되면, 카운트된 업로드 비디오의 개수를 push후 리턴합니다.
+  result.push(count);
+
+  return result;
+}
+
+//Q26
+function queueParking(spaceOrder, arrivalOrder, departureOrder) {
+  //주차장 꽉찼으면 특정 순서로 나간다.
+  //기다리는 중에 차 더오면 큐로 도착한 순서대로 줄 선다
+  //주차장이 자리나면 큐에 첫번째 차량이 주차한다.
+  //차량 무게에 따른 주차공간의 특정 운임비율과 킬로그램을 곱한다.
+
+  //주차장 비어있는 경우 spaceOrder 길이만큼 일단 계산하기
+  let dollar = 0;
+  for (let i = 0; i < spaceOrder.length; i++) {
+    dollar += spaceOrder[i] * arrivalOrder[i];
+  }
+  //주차장이 다 찬 경우라서 departureOrder 순으로 나가서 비는 공간에 차가 들어가므로
+  //빠지는 곳이 몇번째인지 보고 인덱스 값을 구해서 계산해줌
+  for (let j = spaceOrder.length; j < arrivalOrder.length; j++) {
+    let Nth = departureOrder.shift();
+    dollar += arrivalOrder[j] * spaceOrder[Nth - 1];
+  }
+  return dollar;
+}
+
+//i) queue
+function queueParking(spaceOrder, arrivalOrder, departureOrder) {
+  let totalRevenue = 0;
+  let count = 0;
+
+  while (arrivalOrder.length > 0) {
+    const head = arrivalOrder[0];
+
+    //When the first car is parked, the parking spaces are all empty.
+    //So cars should be parked in order according to the number of parking spaces.
+    if (count < spaceOrder.length) {
+      totalRevenue = totalRevenue + head * spaceOrder[count];
+    } else {
+      const departureIdx = count - spaceOrder.length;
+      const parkIdx = departureOrder[departureIdx] - 1;
+      totalRevenue = totalRevenue + head * spaceOrder[parkIdx];
+    }
+    arrivalOrder.shift();
+    count++;
+  }
+  return totalRevenue;
+}
+
+/*
+코드스테이츠 레퍼런스
+//ii) recursive
+function queueParking(spaceOrder, arrivalOrder, departureOrder){
+
+  base case: arrivalOrder.length === 0, return 0;
+  recursive case: arrivalOrder.length > 0
+  
+  let count = 0;
+  let totalRevenue = 0;
+  const aux = function(spaceOrder, arrivalOrder, departureOrder, count){
+    if(arrivalOrder.length === 0) {
+      return 0;
+    }
+
+    const head = arrivalOrder[0];
+    if(count < spaceOrder.length){
+      totalRevenue = head * spaceOrder[count];
+      count++;
+      return totalRevenue + aux(spaceOrder, arrivalOrder.slice(1), departureOrder, count);
+    }else{
+      const departureIdx = count - spaceOrder.length;
+      const parkIdx = departureOrder[departureIdx]-1;
+      totalRevenue = head * spaceOrder[parkIdx];
+      count++;
+      return totalRevenue + aux(spaceOrder, arrivalOrder.slice(1), departureOrder, count);
+    }
+  }
+  return aux(spaceOrder, arrivalOrder, departureOrder, count);
+}
+*/
+
+//Q27
+function countOfFingerMVs(playingArr) {
+  //첫 엘리먼트가 다를 경우 상관없음
+  //첫 엘리먼트가 같을 경우 두번째 엘리먼트가 중요.
+  //두번째 엘리먼트에서 이미 존재하는 두번째 엘리먼트의 숫자보다 크면 상관없다.
+  //숫자보다 작으면 첫 엘리먼트가 같았던 모든 것을 다 없애줘야한다.
+  //그런 식으로 하면 된다.
+
+  //맵을 돌려서 전부 숫자로 바꿔준다.
+  playingArr = playingArr.map((el) => [Number(el[0]), Number(el[1])]);
+  //객체를 만들어서 숫자를 넣어주고 존재할 경우 분기를 통해서 처리해준다.
+  //마지막에 리턴해줄 카운트 변수도 선언해준다.
+  let result = {};
+  let count = 0;
+  //while문을 이용해서 주어진 매개변수 앞에서 shift를 해서 길이가 0이 될 때까지 반복한다.
+  //EX) result = {5:[15,[15]]} 이런식으로 객체를 구성한다.
+  //5번째 줄에 해당하는 프렛을 모두 result[5][1]에 넣어준다.
+  //이미 존재할 경우 프랫의 숫자가 result[5][0]보다 클 경우 result[5][1]에 푸쉬와 함께 카운트를 세준다.
+  //이미 존재할 경우 프랫의 숫자가 result[5][0]와 같은 경우 카운트를 세지 않는다.
+  //이미 존재할 경우 프랫의 숫자가 result[5][0]보다 작을 경우 result[5][1]의 길이만큼 카운트에 더해주고
+  //result[5][1]를 비우고 현재 들어온 프랫을 넣어준다. 그리고 프랫 카운트를 더해주고 result[5][0]을 더 작은 수로 업데이트 해준다.
+  while (playingArr.length !== 0) {
+    let finger = playingArr.shift();
+    //해당 줄을 잡고 있지 않은 경우
+    if (result[finger[0]] === undefined) {
+      result[finger[0]] = [finger[1], [finger[1]]];
+      count++;
+      //해당 줄을 잡고 있는 경우
+    } else {
+      //들어온 프랫이 현재 프랫보다 큰 경우
+      if (finger[1] > result[finger[0]][0]) {
+        result[finger[0]][1].push(finger[1]);
+        count++;
+      } else if (finger[1] === result[finger[0]][0]) {
+        count = count;
+      }
+      //들어온 프랫이 현재 프랫보다 작은 경우
+      else {
+        count += result[finger[0]][1].length;
+        result[finger[0]][0] = finger[1];
+        result[finger[0]][1] = [finger[1]];
+        count++;
+      }
+    }
+  }
+  return count - 1;
+}
+
+//코드스테이츠 레퍼런스
+function countOfFingerMVs(playingArr) {
+  const [numberOfMelodies, totalFret] = playingArr[0].map(Number);
+  const lines = Array(7)
+    .fill()
+    .map((el) => []);
+  let count = 0;
+  for (let i = 1; i <= numberOfMelodies; i++) {
+    const [line, fret] = playingArr[i].map(Number);
+    const lineStack = lines[line];
+
+    while (lineStack.length) {
+      if (lineStack[lineStack.length - 1] > fret) {
+        lineStack.pop();
+        count++;
+      } else if (lineStack[lineStack.length - 1] === fret) {
+        lineStack.pop();
+        count--;
+        break;
+      } else {
+        break;
+      }
+    }
+    lineStack.push(fret);
+    count++;
+  }
+  return count;
+}
+
+//Q32
+function rowBikesOut(rowBikes, n) {
+  //매개변수 n을 제거하고 그 뒤로 있는 값들을 바깥부터 차례차례 빼준다.
+  //이번엔 빼준 순서대로 원 배열에 다시 넣어준다.
+
+  let idx = rowBikes.indexOf(n);
+  let length = rowBikes.length;
+  let difference = length - idx - 1;
+  let result = rowBikes.slice(0, idx).concat(rowBikes.slice(idx + 1, length));
+  for (let i = idx; i <= idx + difference; i++) {
+    result.splice(i, 0, result.pop());
+  }
+  return result;
+}
+
+//코드스테이츠 레퍼런스
+function rowBikesOut(rowBikes, n) {
+  // n번째 바이크가 빠져나가기 위해
+  // 끝에서부터 나간 바이크들을 순서대로 넣을 배열
+  const exitBikes = [];
+
+  while (rowBikes.length >= n) {
+    if (rowBikes.length === n) {
+      rowBikes.pop();
+      continue;
+    }
+    //끝에서 부터 바이크를 내보낸 후, exitBikes에 넣어주기.
+    const exitBike = rowBikes.pop();
+    exitBikes.push(exitBike);
+  }
+  // exitBikes를 rowBikes에 차례대로 쌓기
+  for (let i = 0; i < exitBikes.length; i++) {
+    rowBikes.push(exitBikes[i]);
+  }
+
+  return rowBikes;
+}
