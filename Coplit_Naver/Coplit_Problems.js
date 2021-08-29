@@ -37,6 +37,25 @@ let isIsogram = function (str) {
   return true;
 };
 
+//코드스테이츠 레퍼런스
+function isIsogram(str) {
+  if (str.length === 0) {
+    return true;
+  }
+
+  let storage = {};
+  let strLowerCase = str.toLowerCase();
+
+  for (let i = 0; i < strLowerCase.length; i++) {
+    if (storage[strLowerCase[i]]) {
+      return false;
+    }
+    storage[strLowerCase[i]] = 1;
+  }
+
+  return true;
+}
+
 //Q4
 function runLength(str) {
   //전이랑 같은 글자면 숫자+1에 알파벳
@@ -114,25 +133,72 @@ const balancedParens = function (str) {
 };
 
 //Q9
+//Minimum requirements는 충족했으나 Advance는 아직
+function commonCharacters(string1, string2) {
+  let maxNum = Math.max(string1.length, string2.length);
+  let result = [];
+  for (let i = 0; i < maxNum; i++) {
+    if (string2.includes(string1[i])) {
+      result.push(string1[i]);
+    }
+  }
+  return result.join("");
+}
 
-//레퍼런스
-// function isIsogram(str) {
-//   if(str.length === 0) {
-//     return true;
-//   }
+//코드스테이츠 레퍼런스
+const intersection = function (set1, set2) {
+  return Object.keys(set1).reduce(function (out, val) {
+    if (val in set2) {
+      out[val] = true;
+    }
+    return out;
+  }, {});
+};
+// Takes a string and makes an object with each  alphabetical character in the string represented by a key with the value 'true'
+const objectify = function (string) {
+  return string.split("").reduce(function (obj, char) {
+    // this simple regex matches only alphabetical characters of either case
+    if (char.match(/[a-z]/i)) {
+      obj[char] = true;
+    }
+    return obj;
+  }, {});
+};
 
-//   let storage = {};
-//   let strLowerCase = str.toLowerCase();
+function commonCharacters(string1, string2) {
+  // Separate out multiple input strings
+  let otherStrings = Array.prototype.slice.call(arguments, 1);
 
-//   for(let i = 0; i < strLowerCase.length; i++) {
-//     if(storage[strLowerCase[i]]) {
-//       return false;
-//     }
-//     storage[strLowerCase[i]] = 1;
-//   }
+  // Use reduce to iterate over all collections of letters, narrowing down the pool of common characters.
+  // Go look at the helper functions and figure out what they do!
+  let common = otherStrings.reduce(function (obj, string) {
+    obj = intersection(obj, objectify(string));
+    return obj;
+  }, objectify(string1)); // An object representing all characters in string1 is passed in as a starting value
 
-//   return true;
-// }
+  // use reduce to create a string representing all common chars in the order seen in string1, and return it!
+  return string1.split("").reduce(function (result, char) {
+    if (common[char]) {
+      result += char;
+      common[char] = false;
+    }
+    return result;
+  }, "");
+}
+
+//Q10
+//최대공약수 구하기 유클리드 호제법
+function gcd(m, n) {
+  if (m % n === 0) return n;
+  return gcd(n, m % n);
+}
+//최대공약수를 이용해서 최소공배수 구하기
+function lcm(m, n) {
+  let GCD = gcd(m, n);
+  return (m * n) / GCD;
+}
+
+//Q11
 
 //Week2 test1
 function test1(romanNumeral) {
