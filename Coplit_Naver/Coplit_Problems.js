@@ -199,7 +199,31 @@ function lcm(m, n) {
 }
 
 //Q11
+function findMinByBracket(str) {
+  let cnt = 0;
+  for (let i = 1; i < str.length; i += 1) {
+    if (str[i] == "+") {
+      cnt += 1;
+    } else if (str[i] == "-") {
+      break;
+    }
+  }
+  let separators = [" ", "+", "-"];
+  let tokens = str.split(new RegExp("[" + separators.join("") + "]", "g"));
 
+  let sum = Number(tokens[0]);
+
+  let temp = 0;
+  for (let i = 1; i < tokens.length; i += 1) {
+    if (temp < cnt) {
+      sum += Number(tokens[i]);
+    } else {
+      sum -= Number(tokens[i]);
+    }
+    temp++;
+  }
+  return sum;
+}
 //Week2 test1
 function test1(romanNumeral) {
   // 기준이 되는 로마숫자에서 덧셈의 경우 오른쪽에 붙이기
