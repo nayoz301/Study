@@ -32,6 +32,8 @@ Math.min //max와 같은 문법이지만 가장 작은 값 반환
 
 //거듭제곱
 Math.pow(2,3) //2의 3승
+Math.pow(5,0.5) // 5의 제곱근을 이렇게 구할 수도 있다.
+Math.sqrt(5) // 5의 제곱근 구하기.
 2**3 //2의 3승
 
 //slice => str이나 arr를 자를 때 사용
@@ -147,4 +149,5 @@ let arr = []
     makeArr();
   }
 
-  
+//배열안의 숫자 스트링을 숫자로 만들기
+let StringNum=["1", "2", "3", "4"].toString().split(`,`).map(x=>+x)
