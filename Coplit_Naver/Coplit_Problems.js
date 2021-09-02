@@ -224,6 +224,75 @@ function findMinByBracket(str) {
   }
   return sum;
 }
+
+//Q13
+function deepEquals(obj1, obj2) {
+  if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+
+  for (let keyy in obj1) {
+    if (!keyy in obj2) {
+      return false;
+    }
+  }
+
+  for (let key in obj1) {
+    if (typeof obj1[key] === "object") {
+      let result = deepEquals(obj1[key], obj2[key]);
+      if (result !== true) {
+        return false;
+      }
+    } else if (obj1[key] === obj2[key]) {
+      continue;
+    } else if (obj1[key] !== obj2[key]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+//Week1 test1
+//Palindrome 풀이
+function test1(string) {
+  //매개변수의 길이를 length에 할당
+  //리턴할 result 값에 일단 빈 문자열을 할당
+  let length = string.length;
+  let result = "";
+
+  //유효성 검사 함수
+  //1과 3, 2와 4, 3과 5 이런 식으로 인덱스를 2간격으로 비교하면서 같은지를 비교하고
+  //1과 2, 2와 3, 3과 4 이런식으로 1간격으로 비교하면서 같은지를 비교한다.
+  //그러다가 두 개의 유효성 검사에서 양쪽 인덱스에 위치한 값이 같고
+  //인덱스의 값이 둘다 양수이면서 length를 넘지 않는 것에 걸리면
+  //while문으로 가운데서부터 양 끝으로 왼쪽으로는 인덱스 0까지 쭉 내려가고
+  //오른쪽으로는 인덱스 Length까지 쭉 내려가면서 각 숫자가 같은지를 비교하는 방식.
+  const centeredPalindrome = function (left, right) {
+    while (left >= 0 && right < length && string[left] === string[right]) {
+      left--;
+      right++;
+    }
+    return string.slice(left + 1, right);
+  };
+
+  // Loop through the whole string,
+  // checking for palindromes
+  for (let i = 0; i < length; i++) {
+    //두 개의 유효성 검사에 하나라도 걸리면
+    //기존에 result에 할당했던 값보다 길이가 길면
+    //새로운 값을 재할당해준다.
+    const oddPal = centeredPalindrome(i - 1, i + 1);
+    const evenPal = centeredPalindrome(i, i + 1);
+
+    if (oddPal.length > result.length) {
+      result = oddPal;
+    }
+    if (evenPal.length > result.length) {
+      result = evenPal;
+    }
+  }
+  return result;
+  /* END SOLUTION */
+}
+
 //Week2 test1
 function test1(romanNumeral) {
   // 기준이 되는 로마숫자에서 덧셈의 경우 오른쪽에 붙이기
