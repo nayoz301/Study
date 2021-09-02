@@ -98,7 +98,7 @@ function solution(A) {
   return equiLeader;
 }
 
-//Lesson9
+//Lesson9 MaxSliceSum
 function solution(A) {
   let max = 0;
   const sum = A.reduce((prevSum, currentNum) => {

@@ -77,7 +77,42 @@ function fibonacci(n, memo = [0, 1]) {
 // }
 
 //3
+const isSubsetOf = function (base, sample) {
+  //base와 sample 정렬
+  base.sort((a, b) => a - b);
+  sample.sort((a, b) => a - b);
 
+  //내부 함수를 만들어서 sample의 엘리먼트를 반복문으로
+  //차례대로 대입하면서 해당 엘리먼트가 base에 있는지
+  //base를 반복문으로 돌려가면서 비교해준다.
+  //base에 있다면 그 인덱스를 리턴하고
+  //base에 없고 같은 수가 나오기전에 sample[i]보다 큰수가 나오게 되면
+  //base에 해당 숫자가 없는 격이 되므로 -1을 리턴해준다.
+  //그리고 idx에 찾아낸 sample[i]의 인덱스를 할당해주게 되므로
+  //sample[i+1]을 찾을 때는 전에 찾았던 idx 다음부터 찾으면 된다.
+  //이 부분 기억하기
+  function findCurInBase(cur, base, idx) {
+    for (let i = idx; i < base.length; i++) {
+      if (base[i] === cur) {
+        return i;
+      } else if (base[i] > cur) {
+        return -1;
+      }
+    }
+    return -1;
+  }
+
+  let idx = 0;
+  for (let i = 0; i < sample.length; i++) {
+    idx = findCurInBase(sample[i], base, idx);
+    if (idx === -1) {
+      return false;
+    }
+  }
+  return true;
+};
+
+//코드스테이츠 레퍼런스
 const isSubsetOf = function (base, sample) {
   // naive solution: O(M * N)
   // return sample.every((item) => base.includes(item));
