@@ -424,3 +424,39 @@ Node.prototype.addChild = function (child) {
   this.children.push(child);
   return child;
 };
+
+//Q8
+//내 풀이
+const largestProductOfThree = function (arr) {
+  if (arr.length === 3) {
+    return arr.reduce((acc, cur) => acc * cur);
+  } else {
+    let positiveNum = arr.filter((el) => el >= 0).sort((a, b) => b - a);
+    let negativeNum = arr.filter((el) => el < 0).sort((a, b) => a - b);
+    if (negativeNum.length >= 1) {
+      positiveNum = positiveNum.slice(0, 3);
+      return positiveNum.reduce((acc, cur) => acc * cur);
+    } else if (positiveNum.length === 0) {
+      negativeNum = negativeNum.slice(-3);
+      return negativeNum.reduce((acc, cur) => acc * cur);
+    } else {
+      if (
+        negativeNum.slice(0, 2).reduce((acc, cur) => acc * cur) >
+        positiveNum.slice(0, 2).reduce((acc, cur) => acc * cur)
+      ) {
+        return (
+          negativeNum.slice(0, 2).reduce((acc, cur) => acc * cur) *
+          positiveNum[0]
+        );
+      }
+    }
+  }
+};
+
+const largestProductOfThree = function (arr) {
+  const sorted = arr.slice().sort((a, b) => a - b);
+  const len = arr.length;
+  const candi1 = sorted[len - 1] * sorted[len - 2] * sorted[len - 3];
+  const candi2 = sorted[len - 1] * sorted[0] * sorted[1];
+  return Math.max(candi1, candi2);
+};
