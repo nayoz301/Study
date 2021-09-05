@@ -460,3 +460,41 @@ const largestProductOfThree = function (arr) {
   const candi2 = sorted[len - 1] * sorted[0] * sorted[1];
   return Math.max(candi1, candi2);
 };
+
+//Q9
+function power(base, exponent) {
+  if (exponent === 0) return 1;
+
+  const half = parseInt(exponent / 2);
+  const temp = power(base, half);
+  const result = (temp * temp) % 94906249;
+
+  if (exponent % 2 === 1) return (base * result) % 94906249;
+  else return result;
+}
+
+//Q10
+//풀어봤으나 실패. 다시 한번 풀기
+const binarySearch = function (arr, target) {
+  // arr.sort((a,b)=>(a-b));
+  let count = 0;
+  let recursive = function (arr, target, count) {
+    if (arr.length === 1) {
+      if (arr[0] === target) {
+        return count;
+      } else {
+        return -1;
+      }
+    }
+    let length = Math.round(arr.length / 2);
+    let smallerArr = arr.slice(0, length);
+    let biggerArr = arr.slice(length);
+    if (target <= smallerArr[length - 1]) {
+      return recursive(smallerArr, target, count);
+    } else if (target >= biggerArr[0]) {
+      count = count + length;
+      return recursive(biggerArr, target, count);
+    }
+  };
+  return recursive(arr, target);
+};
