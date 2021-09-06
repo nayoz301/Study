@@ -416,3 +416,24 @@ function movingStuff(stuff, limit) {
   // 전체 짐의 개수에서 한번에 2개를 나를 수 있는 경우를 빼 주면 총 필요한 박스의 개수를 구할 수 있다
   return stuff.length - twoStuff;
 }
+
+//Q16
+function ocean(target, type) {
+  type.sort((a, b) => a - b);
+  let obj = {};
+  for (let i = 0; i <= target; i++) {
+    obj[i] = 0;
+  }
+  obj[0] = 1;
+  const sum = (value) => {
+    for (let prop in obj) {
+      if (value <= prop) {
+        obj[prop] = obj[prop] + obj[prop - value];
+      }
+    }
+  };
+  for (let el of type) {
+    sum(el);
+  }
+  return obj[target];
+}
