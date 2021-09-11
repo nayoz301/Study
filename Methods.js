@@ -151,3 +151,7 @@ let arr = []
 
 //배열안의 숫자 스트링을 숫자로 만들기
 let StringNum=["1", "2", "3", "4"].toString().split(`,`).map(x=>+x)
+
+//10진법을 2진법으로 바꾸기
+let num = 12345;
+let newNum = num.toString(2);
