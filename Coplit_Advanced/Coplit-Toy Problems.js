@@ -40,7 +40,7 @@ const rockPaperScissors = function (num) {
   return result;
 };
 
-//2
+//Q2
 
 function fibonacci(n, memo = [0, 1]) {
   if (memo[n] !== undefined) {
@@ -76,7 +76,7 @@ function fibonacci(n, memo = [0, 1]) {
 //   }
 // }
 
-//3
+//Q3
 const isSubsetOf = function (base, sample) {
   //base와 sample 정렬
   base.sort((a, b) => a - b);
@@ -138,7 +138,7 @@ const isSubsetOf = function (base, sample) {
   return true;
 };
 
-//4
+//Q4
 //내 풀이
 const bubbleSort = function (arr) {
   let storage = arr.slice();
@@ -178,10 +178,8 @@ let bubbleSort = function (arr) {
   let N = arr.length;
 
   for (let i = 0; i < N; i++) {
-    // swap 횟수를 기록한다.
-    // 어떤 요소도 swap되지 않은 경우, 배열은 정렬된 상태이다.
+    // swap 횟수를 기록하기. 스왑이 일어나지 않은 경우는 정렬된 상태이므로 두번째 포문을 한번 돌고 바로 break로 빠져나오기.
     let swaps = 0;
-
     // 매 반복(iteration)마다 i번째로 큰 수가 마지막에서 i번째 위치하게 된다.
     // 이미 정렬된 요소는 고려할 필요가 없으므로, 'j < N - 1 - i'만 비교하면 된다.
     // 예를 들어 [0,4,1,2,3,5,6,7]일 때 i가 3이면
@@ -192,6 +190,8 @@ let bubbleSort = function (arr) {
     // i가 1일때 배열의 arr.length-2 인덱스에 두번째로 큰 수가 오게 된다. 그래서 N - 1 - i 하면 arr.length-2 여기까지만 확인한다. 맨뒤는 이미 맞춰졌으니까
     for (let j = 0; j < N - 1 - i; j++) {
       //두번째 포문에 i들어가는 거 주의하기
+      //i의 수 만큼 맨 뒤에 큰 수들이 정렬되어 있게되므로 i만큼을 빼주는 것이 효율적이다.
+      //i가 3이면 뒤에 5,6,7이 정렬되어있다는 소리. i가 2이면 6,7.
       if (arr[j] > arr[j + 1]) {
         swaps++;
         swap(j, j + 1, arr);
@@ -202,10 +202,10 @@ let bubbleSort = function (arr) {
     }
   }
   return arr;
-};
 
-const swap = function (idx1, idx2, arr) {
-  [arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]];
+  function swap(idx1, idx2, arr) {
+    [arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]];
+  }
 };
 
 //레퍼런스
@@ -271,7 +271,27 @@ let bubbleSort = function (arr) {
   return arr;
 };
 
-//5
+//Q5
+//피보나치랑 결이 비슷한 문제
+//타일이 2x0이면 놓을 공간이 없으므로 0개 방법
+//2x1 이면 세로로 한번 놓을 수 있으므로 1개 방법
+//2x2 이면 세로로 1 방법 + 가로로 1 방법해서 2개 방법
+//2x3 이면 두 가지 경우로 나눌 수 있음
+//1. 맨 왼쪽 타일을 세로로 놓을 경우 : 앞선 2X2의 결과가 나옴 : 2개
+//2. 맨 왼쪽 타일을 가로로 놓을 경우 : 앞선 2X1의 결과가 나옴 : 1개
+//1번과 2번을 합친 3개가 된다.
+//고로 2Xn => 2(n-1) + 2(n-2)가 된다.
+//파보나치 같은 느낌.
+let tiling = function (n, memo = [0, 1, 2]) {
+  if (n < 2) {
+    return memo[n];
+  }
+  if (memo[n] !== undefined) {
+    return memo[n];
+  }
+  return (memo[n] = tiling(n - 1, memo) + tiling(n - 2, memo));
+};
+
 // naive solution: O(2^N)
 // 2 x 4 보드에 타일을 놓는 방법은 5가지다.
 // 각 타일을 a, b, c, d로 구분한다.
