@@ -155,3 +155,19 @@ let StringNum=["1", "2", "3", "4"].toString().split(`,`).map(x=>+x)
 //10진법을 2진법으로 바꾸기
 let num = 12345;
 let newNum = num.toString(2);
+
+//배열안 특정 idx를 서로 바꾸는 방법
+//arr이 reference type이라 가능
+// 1.Destructuring assignment를 활용한 방법
+let arr = [1,2,3,4,5];
+[arr[1], arr[2]] = [arr[2], arr[1]]
+console.log(arr); //[1, 3, 2, 4, 5]
+// 2. 임시 변수를 활용한 방법
+let temp = arr[idx1];
+arr[idx1] = arr[idx2];
+arr[idx2] = temp;
+// 3.XOR 연산을 활용한 방법
+// 이건 잘 모르겠다
+arr[idx1] ^= arr[idx2];
+arr[idx2] ^= arr[idx1];
+arr[idx1] ^= arr[idx2];
