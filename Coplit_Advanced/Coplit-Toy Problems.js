@@ -173,7 +173,40 @@ const bubbleSort = function (arr) {
   }
 };
 
-//래퍼런스
+//래퍼런스 정리한거
+let bubbleSort = function (arr) {
+  let N = arr.length;
+
+  for (let i = 0; i < N; i++) {
+    // swap 횟수를 기록한다.
+    // 어떤 요소도 swap되지 않은 경우, 배열은 정렬된 상태이다.
+    let swaps = 0;
+
+    // 매 반복(iteration)마다 i번째로 큰 수가 마지막에서 i번째 위치하게 된다.
+    // 이미 정렬된 요소는 고려할 필요가 없으므로, 'j < N - 1 - i'만 비교하면 된다.
+    // 예를 들어 [0,4,1,2,3,5,6,7]일 때 i가 3이면
+    // 이미 5,6,7은 전 단계에서 배열이 맞춰진 것이므로 뒤에 3개는 볼 필요가 없다.
+    // 그렇기 떄문에 'j < N - 1 - i'만 비교하면 되는 것이다.
+    // i가 0일때 배열의 마지막 인덱스에 가장 큰 수가 오게 된다. 그래서 N - 1 - i 하면 배열 가장 마지막 수가 된다.
+    // i가 1일때 배열의 arr.length-2 인덱스에 두번째로 큰 수가 오게 된다. 그래서 N - 1 - i 하면 arr.length-2 여기까지만 확인한다. 맨뒤는 이미 맞춰졌으니까
+    for (let j = 0; j < N - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        swaps++;
+        swap(j, j + 1, arr);
+      }
+    }
+    if (swaps === 0) {
+      break;
+    }
+  }
+  return arr;
+};
+
+const swap = function (idx1, idx2, arr) {
+  [arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]];
+};
+
+//레퍼런스
 const swap = function (idx1, idx2, arr) {
   // 두 변수를 바꾸는 방법
 
@@ -497,4 +530,22 @@ const binarySearch = function (arr, target) {
     }
   };
   return recursive(arr, target);
+};
+
+//레퍼런스
+const binarySearch = function (arr, target) {
+  let left = 0,
+    right = arr.length - 1;
+  while (left <= right) {
+    let middle = parseInt((right + left) / 2);
+    if (arr[middle] === target) {
+      return middle;
+    }
+    if (target < arr[middle]) {
+      right = middle - 1;
+    } else {
+      left = middle + 1;
+    }
+  }
+  return -1;
 };
