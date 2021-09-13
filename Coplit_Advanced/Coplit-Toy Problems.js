@@ -417,7 +417,7 @@ function sudoku(board) {
     for (let x = 0; x <= 8; x++) if (grid[row][x] === num) return false;
 
     // 세로 축 확인
-    for (let x = 0; x <= 8; x++) if (grid[x][col] === num) return false;
+    for (let y = 0; y <= 8; y++) if (grid[y][col] === num) return false;
 
     // 3 x 3 섹션을 구한다.
     // 각 row와 col을 3으로 나눈 뒤 나머지를 각각 row, col에서 뺀다.
