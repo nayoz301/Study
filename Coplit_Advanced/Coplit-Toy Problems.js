@@ -363,6 +363,94 @@ let tiling = function (n) {
 // };
 
 //Q6
+function sudoku(board) {
+  let sudokuLength = 9;
+  let row = -1;
+  let col = -1;
+  // blankToFill가 true 라는 건 스도쿠가 꽉꽉 채워졌다 더 이상 풀 칸이 없다
+  // blankToFill가 false 라는 건 스도쿠에 아직 0이 있다. 즉, 풀어야할 칸이 아직 존재
+  let blankToFill = false;
+  // 더 이상 풀 게 없다고 가정하고 false를 할당
+  for (let i = 0; i < sudokuLength; i++) {
+    for (let j = 0; j < sudokuLength; j++) {
+      // 스도쿠 칸 전부를 돌아보면서 0인 경우 좌표를 기억해놓는다
+      if (board[i][j] === 0) {
+        row = i;
+        col = j;
+
+        // 0이 발견된 경우 true로 바꾸고 이중반복문을 나간다.
+        blankToFill = true;
+        break;
+      }
+    }
+    // 아까 true로 바뀌었기 때문에 반복문을 나간다.
+    if (blankToFill) {
+      break;
+    }
+  }
+  // 이중반복문을 돌고도 위에 조건에 걸리지 않은 경우엔 0이 하나도 없는 경우 이므로 리턴해준다.
+  if (!blankToFill) {
+    return board;
+  }
+
+  // 스도쿠 1~9까지의 숫자를 반복문으로 차례차례 대입해보면서 유효성 검사를 해준다.
+  for (let num = 1; num <= sudokuLength; num++) {
+    if (isValid(board, row, col, num)) {
+      // 유효성 검사 통과했으면 해당 num을 넣어준다.
+      board[row][col] = num;
+      if (sudoku(board)) {
+        // 유효성 검사 통과 후 재귀돌려서 여전히 채울 칸이 남았는지 확인하고 있으면 리턴, 없으면 다시 반복한다.
+        // 만약 채워야할 칸이 4개일 경우 첫번째 칸을 임의로 채우고 재귀로 2번째 칸을 임의로 채우고 3번째 칸을 채우는 방식인데
+        // 1번째 칸이 잘못된 경우에는 2번째 3번째 칸을 채웠던 것을 전부 다 버리고 1번째칸 진행 중이던 곳으로 돌아가서 1번째 칸에 다음 값을 넣어서 시도해본다.
+        // board의 값은 배열이라 참조하는 값의 주소를 갖고있는다. 그래서 재귀 탈출 시에 굳이 리턴해주지 않아도 참조 주소값을 다 공유하므로 리턴해도 무방한 경우이다.
+        return board;
+      } else {
+        // Replace it
+        board[row][col] = 0;
+      }
+    }
+  }
+  return false;
+
+  function isValid(grid, row, col, num) {
+    // 가로 축 확인
+    for (let x = 0; x <= 8; x++) if (grid[row][x] === num) return false;
+
+    // 세로 축 확인
+    for (let x = 0; x <= 8; x++) if (grid[x][col] === num) return false;
+
+    // 3 x 3 섹션을 구한다.
+    // 각 row와 col을 3으로 나눈 뒤 나머지를 각각 row, col에서 뺀다.
+    /**
+     * ex) row가 5라면 5 - ( 5 % 3 ) = 3
+     *     col이 2라면 2 - ( 2 % 3 ) = 0
+     *
+     * |-------|-------|-------|
+     * |   1   |   2   |   3   |
+     * |-------|-------|-------|
+     * |   4   |   5   |   6   |
+     * |-------|-------|-------|
+     * |   7   |   8   |   9   |
+     * |-------|-------|-------|
+     *
+     */
+    // 여기부터는 내부에 3x3 작은 사각형에 0~9까지의 숫자가 골고루 있는지를 검사하는 것
+    // 큰 사각형에서의 좌표로 계산해서 어떤 작은 사각형에 위치하는지 좌표를 구한다.
+    let startRow = row - (row % 3),
+      startCol = col - (col % 3);
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        // 원래 해당 좌표엔 0이 들어있고 새로운 숫자를 넣기 위한 num이 비교대상으로 주어져있다.
+        // 만약 num과 같은 수가 이미 안에 있다면 false를 리턴해서 다른 수를 찾게 된다.
+        if (grid[i + startRow][j + startCol] === num) return false;
+      }
+    }
+    return board;
+  }
+}
+
+//스도쿠 다른 풀이 이건 이해가 잘 안됌.
 const sudoku = function (board) {
   const N = board.length;
   const boxes = [
