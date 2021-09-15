@@ -295,19 +295,26 @@ class BinarySearchTree {
 
   insert(value) {
     if (value < this.value) {
-      if (this.left === null) this.left = new BinarySearchTree(value);
-      else this.left.insert(value);
+      if (this.left === null) {
+        this.left = new BinarySearchTree(value);
+      } else {
+        this.left.insert(value);
+      }
     } else if (value > this.value) {
-      if (this.right === null) this.right = new BinarySearchTree(value);
-      else this.right.insert(value);
+      if (this.right === null) {
+        this.right = new BinarySearchTree(value);
+      } else {
+        this.right.insert(value);
+      }
     } else {
       return;
     }
   }
 
   contains(value) {
-    if (value === this.value) return true;
-    if (value < this.value) {
+    if (value === this.value) {
+      return true;
+    } else if (value < this.value) {
       if (this.left === null) {
         return false;
       } else {
@@ -320,6 +327,36 @@ class BinarySearchTree {
         return this.right.contains(value);
       }
     }
+  }
+
+  preorder(callback) {
+    callback(this.value);
+    if (this.left) {
+      this.left.preorder(callback);
+    }
+    if (this.right) {
+      this.right.preorder(callback);
+    }
+  }
+
+  inorder(callback) {
+    if (this.left) {
+      this.left.inorder(callback);
+    }
+    callback(this.value);
+    if (this.right) {
+      this.right.inorder(callback);
+    }
+  }
+
+  postorder(callback) {
+    if (this.left) {
+      this.left.postorder(callback);
+    }
+    if (this.right) {
+      this.right.postorder(callback);
+    }
+    callback(this.value);
   }
 }
 //Q10 그래프 인접 행렬 생성하기
