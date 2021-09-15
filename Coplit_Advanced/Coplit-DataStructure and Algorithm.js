@@ -286,7 +286,42 @@ class BinarySearchTree {
     callback(this.value);
   }
 }
+class BinarySearchTree {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
 
+  insert(value) {
+    if (value < this.value) {
+      if (this.left === null) this.left = new BinarySearchTree(value);
+      else this.left.insert(value);
+    } else if (value > this.value) {
+      if (this.right === null) this.right = new BinarySearchTree(value);
+      else this.right.insert(value);
+    } else {
+      return;
+    }
+  }
+
+  contains(value) {
+    if (value === this.value) return true;
+    if (value < this.value) {
+      if (this.left === null) {
+        return false;
+      } else {
+        return this.left.contains(value);
+      }
+    } else if (value > this.value) {
+      if (this.right === null) {
+        return false;
+      } else {
+        return this.right.contains(value);
+      }
+    }
+  }
+}
 //Q10 그래프 인접 행렬 생성하기
 function createMatrix(edges) {
   // let numArr = edges.reduce(function(acc,cur){

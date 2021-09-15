@@ -412,12 +412,12 @@ function sudoku(board) {
   }
   return false;
 
-  function isValid(grid, row, col, num) {
+  function isValid(board, row, col, num) {
     /*
     // 가로 축 확인
-    for (let x = 0; x <= 8; x++) if (grid[row][x] === num) return false;
+    for (let x = 0; x <= 8; x++) if (board[row][x] === num) return false;
     // 세로 축 확인
-    for (let y = 0; y <= 8; y++) if (grid[y][col] === num) return false;
+    for (let y = 0; y <= 8; y++) if (board[y][col] === num) return false;
     이 두개를 하나로 뭉쳐서 바로 밑의 코드로 만듦;
     */
     for (let i = 0; i < sudokuLength; i++) {
@@ -450,10 +450,10 @@ function sudoku(board) {
       for (let j = 0; j < 3; j++) {
         // 원래 해당 좌표엔 0이 들어있고 새로운 숫자를 넣기 위한 num이 비교대상으로 주어져있다.
         // 만약 num과 같은 수가 이미 안에 있다면 false를 리턴해서 다른 수를 찾게 된다.
-        if (grid[i + startRow][j + startCol] === num) return false;
+        if (board[i + startRow][j + startCol] === num) return false;
       }
     }
-    return board;
+    return true;
   }
 }
 
