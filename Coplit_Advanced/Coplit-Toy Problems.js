@@ -40,8 +40,46 @@ const rockPaperScissors = function (num) {
   return result;
 };
 
-//Q2
+//Q1
+function orderOfPresentation(N, K) {
+  /*
+  a! = a*(a-1)!
+  1! = 1 * 0!
+  1 = 1 * 0!
+  0! = 1;
+  */
+  let factorial = (n) => {
+    if (n <= 1) return 1;
+    else return n * factorial(n - 1);
+  };
+  let order = 0;
+  let isUsed = new Array(N + 1).fill(false);
+  for (let i = 0; i < N; i++) {
+    /*
+    주어진 배열의 숫자들로 순열을 만들어서 작은 차례부터 쭉 나열헀을 때
+    주어진 K배열이 앞에서 몇번째에 오는지를 알아보는 문제이다.
+    주어진 배열 맨 앞의 숫자부터 확인한다. 맨 앞 숫자가 4라면 그 밑의 숫자인 1,2,3을 이용한 배열들이
+    차례가 모두 지나간 것이 되므로 1을 맨앞으로, 2를 맨앞으로, 3을 맨앞으로 내서 만들 수 있는 숫자를
+    쫙 뽑고 그 걸 카운트로 세주고 4가 맨 앞에 있을 경우에 그 다음 숫자들을 계산해보며 카운트를 계산한다.
+    */
+    //배열 맨 앞 숫자를 뽑는다.
+    let num = K[i];
+    //지금 뽑은 숫자는 사용된 것으로 간주하여 true값으로 바꿔준다.
+    isUsed[num] = true;
+    //맨 앞 숫자보다 낮은 숫자들로 만들 수 있는 순열을 계산하기 위해 맨 앞 숫자보다 작은 숫자들의 false값만 뽑는다.
+    let preUsedNum = isUsed.slice(1, num); //0은 더미 데이터라서 1부터 시작;
+    //현재 해당숫자 앞에 사용되었다고 가정한 숫자들의 개수 구하기(num보다 작은 인덱스 중 false인 갯수 구하기)
+    let preUsedNumCt = preUsedNum.filter((el) => el === false).length;
+    //맨 앞자리 숫자를 고정하고 나머지 숫자로 순열을 만들어서 갯수가 몇개나 나오는지를 보기 위해서
+    //팩토리얼 함수에 배열의 길이(요소의 갯수)-현재 기준이되는 숫자 갯수(현재 맨 앞자리 고정을 가정했으므로 1)을 해준다.
+    //i값이 0이므로 -1을 더 해줘서 고정되는 값의 갯수를 나타내준다.
+    let count = preUsedNumCt * factorial(N - i - 1);
+    order += count;
+  }
+  return order;
+}
 
+//Q2
 function fibonacci(n, memo = [0, 1]) {
   if (memo[n] !== undefined) {
     // if(memo[n]){
@@ -637,19 +675,18 @@ N => exponent 40 짝수여서 return result(70159437*70159437%94906249===1933482
 */
 
 //Q10
+/*O(logN)으로 풀기
+left와 right을 설정한 후에 while문 안에서 mid라는 변수를 매번 새롭게 선언 할당해주면서
+mid 수치에 있는 인덱스 값을 찾아서 확인하면서 풀기
+*/
 const binarySearch = function (arr, target) {
   let left = 0,
     right = arr.length - 1;
-
   while (left <= right) {
     let mid = parseInt((left + right) / 2);
-    if (arr[mid] === target) {
-      return mid;
-    } else if (arr[mid] < target) {
-      left = mid + 1;
-    } else if (arr[mid] > target) {
-      right = mid - 1;
-    }
+    if (arr[mid] === target) return mid;
+    else if (arr[mid] > target) right = mid - 1;
+    else if (arr[mid] < target) left = mid + 1;
   }
   return -1;
 };
