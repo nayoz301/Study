@@ -599,6 +599,36 @@ function power(base, exponent) {
   if (exponent % 2 === 1) return (base * result) % 94906249;
   else return result;
 }
+/* 
+이 방법에선 지수가 짝수인지 홀수인지 두가지로 나눠서 문제에 접근했다.
+자연수 계산을 해야하므로 parseInt를 이용해서 소수점의 경우 내림처리를 했기 때문에.
+지수가 5인 경우 다음 재귀에선 parseInt(2.5)라서 2가 되버린다.
+그렇게 되면 나중에 탈출문을 만나고 다시 위로 올라갈 때 지수 2+2 = 4라서 5가 되기에 1이 부족하므로
+지수가 홀수이게 되면 base를 한번 더 곱해줘서 2+2+1 = 5로 맞춰주는 것이다.
+
+ex) 11*11*11 % 123 === 1331 % 123 === 101;
+101 * 101 % 123 = 115;
+1331 * 1331 % 123 === 115;
+먼저 나머지를 구하고 나머지끼리 곱한 후에 다시 나머지를 구하나
+다 곱하고 나머지를 구하나 결과는 같다.
+
+input이 base===3 에 exponent===40일 경우,
+가장 바깥 함수를 N이라 가정, temp = power(3, 20);
+base===3 / exponent === 20;
+N-1 => temp = power(3,10);
+N-2 => temp = power(3,5);
+N-3 => temp = power(3,2);
+N-4 => temp = power(3,1);
+N-5 => temp = power(3,0);
+N-6 => expo===0 return 1;
+N-5 => exponent 1 홀수여서 return base * result % 94906249; return 3;
+N-4 => exponent 2 짝수여서 return result(3*3===9)
+N-3 => exponent 5 홀수여서 return result(3*81===243)
+N-2 => exponent 10 짝수여서 return result(243*243===59049)
+N-1 => exponent 20 짝수여서 return result(59049*59049%94906249===70159437);
+N => exponent 40 짝수여서 return result(70159437*70159437%94906249===19334827)
+
+*/
 
 //Q10
 //풀어봤으나 실패. 다시 한번 풀기
