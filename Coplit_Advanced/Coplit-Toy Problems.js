@@ -637,29 +637,21 @@ N => exponent 40 짝수여서 return result(70159437*70159437%94906249===1933482
 */
 
 //Q10
-//풀어봤으나 실패. 다시 한번 풀기
 const binarySearch = function (arr, target) {
-  // arr.sort((a,b)=>(a-b));
-  let count = 0;
-  let recursive = function (arr, target, count) {
-    if (arr.length === 1) {
-      if (arr[0] === target) {
-        return count;
-      } else {
-        return -1;
-      }
+  let left = 0,
+    right = arr.length - 1;
+
+  while (left <= right) {
+    let mid = parseInt((left + right) / 2);
+    if (arr[mid] === target) {
+      return mid;
+    } else if (arr[mid] < target) {
+      left = mid + 1;
+    } else if (arr[mid] > target) {
+      right = mid - 1;
     }
-    let length = Math.round(arr.length / 2);
-    let smallerArr = arr.slice(0, length);
-    let biggerArr = arr.slice(length);
-    if (target <= smallerArr[length - 1]) {
-      return recursive(smallerArr, target, count);
-    } else if (target >= biggerArr[0]) {
-      count = count + length;
-      return recursive(biggerArr, target, count);
-    }
-  };
-  return recursive(arr, target);
+  }
+  return -1;
 };
 
 //레퍼런스
