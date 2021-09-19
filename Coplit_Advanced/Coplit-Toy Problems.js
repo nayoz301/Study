@@ -709,36 +709,35 @@ const binarySearch = function (arr, target) {
   return -1;
 };
 
-//Q11 첫 풀이 다 통과 안됨.
+//Q11
+/*
+주어진 매개변수를 스플릿하고 소트로 정렬한다.
+리듀스 함수를 사용해서 중복되는 항목을 제거한다.
+그리고 func함수를 사용해서 재귀로 제일 밑으로 내려간 후에
+filtered의 길이와 같아지게 되면 탈출 조건을 만족시켜서
+올라오면서 맨 끝의 글자부터 하나씩 푸쉬하고
+하나씩 앞으로 이동하면서 푸쉬해준다.
+*/
 const powerSet = function (str) {
-  let newStr = [];
-  for (let i = 0; i < str.length; i++) {
-    // let copied = str.slice()
-    let current = str.slice(i, i + 1);
-    if (newStr.includes(...current)) {
-      continue;
+  let sorted = str.split("").sort();
+  let filtered = sorted.reduce((acc, cur) => {
+    if (acc[acc.length - 1] === cur) {
+      return acc;
     } else {
-      newStr.push(...current);
+      return acc.concat(cur);
     }
-  }
-  newStr.sort((a, b) => b - a);
-
-  let booleanArr = new Array(newStr.length).fill(false);
+  });
   let result = [];
-  function recursive(depth) {
-    if (depth === newStr.length) {
-      let storage = newStr.filter((el, idx) => booleanArr[idx]);
-      result.push(storage.join(""));
+  const func = (idx, subset) => {
+    if (idx === filtered.length) {
+      result.push(subset);
       return;
     }
-    booleanArr[depth] = true;
-    recursive(depth + 1);
-
-    booleanArr[depth] = false;
-    recursive(depth + 1);
-  }
-  recursive(0);
-  return result.sort((a, b) => a - b);
+    func(idx + 1, subset);
+    func(idx + 1, subset + filtered[idx]);
+  };
+  func(0, "");
+  return result.sort();
 };
 
 //Q12 Tree BFS
