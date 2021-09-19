@@ -750,6 +750,8 @@ const rotatedArraySearch = function (rotated, target) {
       // right에 middle -1
       // 그렇지 않을 경우 left에 middle +1
       if (target < rotated[middle] && rotated[left] <= target) {
+        //부등호 잘보기!!! rotated[left] <= target 이꼴 포함해줘야함
+        //위에서 rotated[middle]===target인 경우는 정답이니까 target < rotated[middle] 이렇게 해줌
         right = middle - 1;
       } else {
         left = middle + 1;
@@ -760,6 +762,8 @@ const rotatedArraySearch = function (rotated, target) {
       // left = middle + 1
       // 그렇지 않을 경우 right = middle -1;
       if (target <= rotated[right] && rotated[middle] < target) {
+        //부등호 잘보기!!! target <= rotated[right] 이꼴 포함해줘야함
+        //위에서 rotated[middle]===target인 경우는 정답이니까 rotated[middle] < target 이렇게 해줌
         left = middle + 1;
       } else {
         right = middle - 1;
