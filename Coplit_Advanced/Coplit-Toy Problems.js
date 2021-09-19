@@ -732,3 +732,40 @@ const insertionSort = function (arr) {
 
   return sorted;
 };
+
+//Q14
+const rotatedArraySearch = function (rotated, target) {
+  let left = 0,
+    right = rotated.length - 1;
+
+  while (left <= right) {
+    let middle = parseInt((right + left) / 2);
+
+    if (rotated[middle] === target) {
+      return middle;
+    }
+    // 왼쪽 절반이 정렬되어 있는 상태
+    if (rotated[left] < rotated[middle]) {
+      // 타겟이 맨 왼쪽 숫자보다 크고 중간 숫자보다 작을 경우
+      // right에 middle -1
+      // 그렇지 않을 경우 left에 middle +1
+      if (target < rotated[middle] && rotated[left] <= target) {
+        right = middle - 1;
+      } else {
+        left = middle + 1;
+      }
+      // 오른쪽 절반이 정렬되어 있는 상태
+    } else {
+      // 타겟이 가운데 숫자보단 크고 맨 마지막 숫자보단 작을 경우
+      // left = middle + 1
+      // 그렇지 않을 경우 right = middle -1;
+      if (target <= rotated[right] && rotated[middle] < target) {
+        left = middle + 1;
+      } else {
+        right = middle - 1;
+      }
+    }
+  }
+
+  return -1;
+};
