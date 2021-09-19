@@ -43,11 +43,11 @@ const rockPaperScissors = function (num) {
 //Q1
 function orderOfPresentation(N, K) {
   /*
-  a! = a*(a-1)!
-  1! = 1 * 0!
-  1 = 1 * 0!
-  0! = 1;
-  */
+    a! = a*(a-1)!
+    1! = 1 * 0!
+    1 = 1 * 0!
+    0! = 1;
+    */
   let factorial = (n) => {
     if (n <= 1) return 1;
     else return n * factorial(n - 1);
@@ -56,12 +56,12 @@ function orderOfPresentation(N, K) {
   let isUsed = new Array(N + 1).fill(false);
   for (let i = 0; i < N; i++) {
     /*
-    주어진 배열의 숫자들로 순열을 만들어서 작은 차례부터 쭉 나열헀을 때
-    주어진 K배열이 앞에서 몇번째에 오는지를 알아보는 문제이다.
-    주어진 배열 맨 앞의 숫자부터 확인한다. 맨 앞 숫자가 4라면 그 밑의 숫자인 1,2,3을 이용한 배열들이
-    차례가 모두 지나간 것이 되므로 1을 맨앞으로, 2를 맨앞으로, 3을 맨앞으로 내서 만들 수 있는 숫자를
-    쫙 뽑고 그 걸 카운트로 세주고 4가 맨 앞에 있을 경우에 그 다음 숫자들을 계산해보며 카운트를 계산한다.
-    */
+      주어진 배열의 숫자들로 순열을 만들어서 작은 차례부터 쭉 나열헀을 때
+      주어진 K배열이 앞에서 몇번째에 오는지를 알아보는 문제이다.
+      주어진 배열 맨 앞의 숫자부터 확인한다. 맨 앞 숫자가 4라면 그 밑의 숫자인 1,2,3을 이용한 배열들이
+      차례가 모두 지나간 것이 되므로 1을 맨앞으로, 2를 맨앞으로, 3을 맨앞으로 내서 만들 수 있는 숫자를
+      쫙 뽑고 그 걸 카운트로 세주고 4가 맨 앞에 있을 경우에 그 다음 숫자들을 계산해보며 카운트를 계산한다.
+      */
     //배열 맨 앞 숫자를 뽑는다.
     let num = K[i];
     //지금 뽑은 숫자는 사용된 것으로 간주하여 true값으로 바꿔준다.
@@ -178,36 +178,24 @@ const isSubsetOf = function (base, sample) {
 
 //Q4
 //내 풀이
-const bubbleSort = function (arr) {
-  let storage = arr.slice();
-  let result = [];
-  let tempStorage = "";
-  let length = arr.length - 2;
-  for (let i = arr.length - 1; i >= 0; i--) {
-    let process = bubble(0, 0, i);
-    if (Array.isArray(process)) {
-      return process;
+let bubbleSort = function (arr) {
+  let length = arr.length;
+  for (let i = 0; i < length; i++) {
+    let swap = 0;
+    for (let j = 0; j < length - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        swaps(j, j + 1);
+        swap++;
+      }
+    }
+    if (swap === 0) {
+      break;
     }
   }
-  return result;
+  return arr;
 
-  function bubble(numTill, count, i) {
-    if (count === i) {
-      return storage;
-    }
-    if (numTill === i) {
-      result = storage;
-      return;
-    }
-    if (storage[numTill] > storage[numTill + 1]) {
-      tempStorage = storage[numTill];
-      storage[numTill] = storage[numTill + 1];
-      storage[numTill + 1] = tempStorage;
-    } else {
-      count++;
-    }
-    let recur = bubble(numTill + 1, count, i);
-    return recur;
+  function swaps(prev, next) {
+    [arr[prev], arr[next]] = [arr[next], arr[prev]];
   }
 };
 
@@ -244,69 +232,6 @@ let bubbleSort = function (arr) {
   function swap(idx1, idx2, arr) {
     [arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]];
   }
-};
-
-//레퍼런스
-const swap = function (idx1, idx2, arr) {
-  // 두 변수를 바꾸는 방법
-
-  // 1) 임시 변수를 활용한 방법
-  // let temp = arr[idx1];
-  // arr[idx1] = arr[idx2];
-  // arr[idx2] = temp;
-
-  // 2) Destructuring assignment를 활용한 방법
-  // arr이 reference type이라 가능
-  [arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]];
-
-  // 3) XOR 연산을 활용한 방법
-  // arr이 reference type이라 가능
-  // arr[idx1] ^= arr[idx2];
-  // arr[idx2] ^= arr[idx1];
-  // arr[idx1] ^= arr[idx2];
-};
-
-// naive solution
-// let bubbleSort = function (arr) {
-//   let N = arr.length;
-
-//   for (let i = 0; i < N - 1; i++) {
-//     // 매 반복(iteration)마다 i번째로 큰 수가 마지막에서 i번째 위치하게 된다.
-//     // 이미 정렬된 요소는 고려할 필요가 없으므로, 'j < N - 1 - i'만 비교하면 된다.
-//     for (let j = 0; j < N - 1 - i; j++) {
-//       if (arr[j] > arr[j + 1]) {
-//         swap(j, j + 1, arr);
-//       }
-//     }
-//   }
-
-//   return arr;
-// };
-
-// optimized solution
-let bubbleSort = function (arr) {
-  let N = arr.length;
-
-  for (let i = 0; i < N; i++) {
-    // swap 횟수를 기록한다.
-    // 어떤 요소도 swap되지 않은 경우, 배열은 정렬된 상태이다.
-    let swaps = 0;
-
-    // 매 반복(iteration)마다 i번째로 큰 수가 마지막에서 i번째 위치하게 된다.
-    // 이미 정렬된 요소는 고려할 필요가 없으므로, 'j < N - 1 - i'만 비교하면 된다.
-    for (let j = 0; j < N - 1 - i; j++) {
-      if (arr[j] > arr[j + 1]) {
-        swaps++;
-        swap(j, j + 1, arr);
-      }
-    }
-
-    if (swaps === 0) {
-      break;
-    }
-  }
-
-  return arr;
 };
 
 //Q5
@@ -742,18 +667,22 @@ const powerSet = function (str) {
 
 //Q12 Tree BFS
 let bfs = function (node) {
+  //bfs는 queue
+  //dfs는 stack
   let queue = [node];
-  const values = [];
+  let values = [];
   while (queue.length > 0) {
     //가장 상위 노드부터 시작
     //헤드의 밸류 값을 푸쉬하고 children이 있는 경우에
     //큐에 푸쉬해준다.
-    const head = queue[0];
+    let head = queue[0];
     queue = queue.slice(1);
 
     values.push(head.value);
 
-    head.children.forEach((child) => queue.push(child));
+    if (head.children) {
+      head.children.forEach((child) => queue.push(child));
+    }
   }
   return values;
 };
@@ -769,4 +698,37 @@ let Node = function (value) {
 Node.prototype.addChild = function (child) {
   this.children.push(child);
   return child;
+};
+
+//Q13
+const insertionSort = function (arr) {
+  //말 그대로 빈 배열에 삽입하며 정렬하는 방식을 의미함.
+  //우선 빈 배열에 첫번째 숫자를 담고 그 숫자를 기준으로 삽입한다.
+  let sorted = [arr[0]]; //배열에 담아주는 거 잊지 말기!
+  for (let i = 1; i < arr.length; i++) {
+    //인덱스 0번을 기준으로 두었으니 인덱스 1번부터 시작하는 반복문을 돌린다.
+    //미리 넣어뒀던 기준보다 큰 경우 문제없이 푸쉬해서 정렬해준다.
+    if (arr[i] >= sorted[i - 1]) {
+      // if (arr[i] >= sorted[sorted.length-1]) {
+      sorted.push(arr[i]);
+    } else {
+      //하지만 기존에 추가했던 arr[arr.length-1]이 새로 추가할 숫자보다 작은 경우!
+      //현재 삽입해놓은 배열까지만 돌면서 그 숫자들과 비교하여 맞는 자리를 찾는다.
+      //현재 삽입해놓은 인덱스까지만 돌면 되기 때문에 j < i 로 조건이 설정된다.
+      for (let j = 0; j < i; j++) {
+        if (arr[i] <= sorted[j]) {
+          //조건에 맞는 자리를 찾은 경우
+          //슬라이스로 두 개의 배열로 분리한 후에
+          //concat 메소드를 이용하여 그 중간에 새로 추가할 숫자를 담아서 합친다.
+          //그 후 break로 탈출
+          const left = sorted.slice(0, j);
+          const right = sorted.slice(j);
+          sorted = left.concat(arr[i], right);
+          break;
+        }
+      }
+    }
+  }
+
+  return sorted;
 };
