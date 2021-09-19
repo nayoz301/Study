@@ -709,6 +709,38 @@ const binarySearch = function (arr, target) {
   return -1;
 };
 
+//Q11 첫 풀이 다 통과 안됨.
+const powerSet = function (str) {
+  let newStr = [];
+  for (let i = 0; i < str.length; i++) {
+    // let copied = str.slice()
+    let current = str.slice(i, i + 1);
+    if (newStr.includes(...current)) {
+      continue;
+    } else {
+      newStr.push(...current);
+    }
+  }
+  newStr.sort((a, b) => b - a);
+
+  let booleanArr = new Array(newStr.length).fill(false);
+  let result = [];
+  function recursive(depth) {
+    if (depth === newStr.length) {
+      let storage = newStr.filter((el, idx) => booleanArr[idx]);
+      result.push(storage.join(""));
+      return;
+    }
+    booleanArr[depth] = true;
+    recursive(depth + 1);
+
+    booleanArr[depth] = false;
+    recursive(depth + 1);
+  }
+  recursive(0);
+  return result.sort((a, b) => a - b);
+};
+
 //Q12 Tree BFS
 let bfs = function (node) {
   let queue = [node];
