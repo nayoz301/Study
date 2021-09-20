@@ -176,8 +176,7 @@ const isSubsetOf = function (base, sample) {
   return true;
 };
 
-//Q4
-//내 풀이
+//Q4 Bubble sort
 let bubbleSort = function (arr) {
   let length = arr.length;
   for (let i = 0; i < length; i++) {
@@ -746,10 +745,9 @@ const rotatedArraySearch = function (rotated, target) {
     }
     // 왼쪽 절반이 정렬되어 있는 상태
     if (rotated[left] < rotated[middle]) {
-      // 타겟이 맨 왼쪽 숫자보다 크고 중간 숫자보다 작을 경우
-      // right에 middle -1
+      // 왼쪽 맨 끝에서 중간 사이에 타겟이 있는 경우, 오른쪽 텅텅빈 곳은 쓸모가 없으므로 오른쪽 공간을 줄여주기 위해 right에 middle -1
       // 그렇지 않을 경우 left에 middle +1
-      if (target < rotated[middle] && rotated[left] <= target) {
+      if (rotated[left] <= target && target < rotated[middle]) {
         //부등호 잘보기!!! rotated[left] <= target 이꼴 포함해줘야함
         //위에서 rotated[middle]===target인 경우는 정답이니까 target < rotated[middle] 이렇게 해줌
         right = middle - 1;
@@ -758,10 +756,9 @@ const rotatedArraySearch = function (rotated, target) {
       }
       // 오른쪽 절반이 정렬되어 있는 상태
     } else {
-      // 타겟이 가운데 숫자보단 크고 맨 마지막 숫자보단 작을 경우
-      // left = middle + 1
+      // 중간과 오른쪽 맨 끝 사이에 타겟이 있는 경우, 왼쪽 텅텅빈 곳은 쓸모가 없으므로 왼쪽 공간을 줄여주기 위해 left = middle + 1
       // 그렇지 않을 경우 right = middle -1;
-      if (target <= rotated[right] && rotated[middle] < target) {
+      if (rotated[middle] < target && target <= rotated[right]) {
         //부등호 잘보기!!! target <= rotated[right] 이꼴 포함해줘야함
         //위에서 rotated[middle]===target인 경우는 정답이니까 rotated[middle] < target 이렇게 해줌
         left = middle + 1;
@@ -772,4 +769,21 @@ const rotatedArraySearch = function (rotated, target) {
   }
 
   return -1;
+};
+
+//Q16 Quick sort
+const quickSort = function (arr) {
+  //탈출조건 설정
+  if (arr.length <= 1) return arr;
+  //피벗값 임의로 설정
+  let pivot = arr[0];
+  let left = [];
+  let right = [];
+  for (let i = 1; i < arr.length; i++) {
+    if (pivot > arr[i]) left.push(arr[i]);
+    else right.push(arr[i]);
+  }
+  let leftSorted = quickSort(left);
+  let rightSorted = quickSort(right);
+  return [...leftSorted, pivot, ...rightSorted];
 };
