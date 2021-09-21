@@ -812,3 +812,22 @@ const balancedBrackets = function (str) {
   }
   return stack.length === 0;
 };
+
+//Q18
+const getItemFromTwoSortedArrays = function (arr1, arr2, k) {
+  let cnt = 0,
+    left = 0,
+    right = 0;
+  let target;
+  while (cnt < k) {
+    if (arr1[left] < arr2[right]) {
+      target = arr1[left];
+      left++;
+    } else {
+      target = arr2[right];
+      right++;
+    }
+    cnt++;
+  }
+  return target;
+};
