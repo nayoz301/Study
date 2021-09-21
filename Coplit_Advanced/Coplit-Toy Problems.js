@@ -779,6 +779,7 @@ const quickSort = function (arr) {
   let pivot = arr[0];
   let left = [];
   let right = [];
+  //i의 시작이 1이다
   for (let i = 1; i < arr.length; i++) {
     if (pivot > arr[i]) left.push(arr[i]);
     else right.push(arr[i]);
@@ -786,4 +787,28 @@ const quickSort = function (arr) {
   let leftSorted = quickSort(left);
   let rightSorted = quickSort(right);
   return [...leftSorted, pivot, ...rightSorted];
+};
+
+//Q17 Balanced brackets
+const balancedBrackets = function (str) {
+  //스택을 사용했다.
+  let stack = [];
+  let opener = {
+    "{": "}",
+    "[": "]",
+    "(": ")",
+  };
+  let closer = "}])";
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] in opener) {
+      stack.push(str[i]);
+    } else if (closer.includes(str[i])) {
+      let check = stack.pop();
+      let pair = opener[check];
+      if (str[i] !== pair) {
+        return false;
+      }
+    }
+  }
+  return stack.length === 0;
 };
