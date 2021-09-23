@@ -833,15 +833,24 @@ const getItemFromTwoSortedArrays = function (arr1, arr2, k) {
   return target;
 };
 //다른 풀이
+// arr1과 arr2를 합쳤을 때 k번째 인덱스에 있는 숫자가 무엇인지를 찾는다.
+// k가 4일때 left가 3인 경우 right은 1이다.
+// 이진 탐색으로 k값을 반으로 나누고 나눈 값 만큼 인덱스를 이동해서 arr1과 arr2의 숫자를 비교하는 방식
 const getItemFromTwoSortedArrays = function (arr1, arr2, k) {
   let leftIdx = 0,
     rightIdx = 0;
 
   while (k > 0) {
+    // arr1과 arr2를 합쳤을 때 k번째 인덱스에 있는 숫자가 무엇인지를 찾는다.
+    // k값을 반으로 나눠서 이진 탐색을 한다.
     let cnt = Math.ceil(k / 2);
     let leftStep = cnt,
       rightStep = cnt;
 
+    // 엣지 케이스
+    // leftIdx는 양 배열의 인덱스에 있는 값을 비교해서 건너뛸 숫자만큼을 나타낸다.
+    // 이미 건너뛰기로 한 만큼과 배열의 길이가 같은데 cnt가 여전히 남아있을 경우에는 진행이 불가하다.
+    // 이럴땐 남은 cnt를 넘겨서 반대편 배열에서 처리할 수 있도록 해준다.
     if (leftIdx === arr1.length) {
       rightIdx = rightIdx + k;
       break;
@@ -852,19 +861,25 @@ const getItemFromTwoSortedArrays = function (arr1, arr2, k) {
       break;
     }
 
+    // 엣지 케이스
+    // 현재 카운트가 남아있는 후보 요소들보다 많을 경우, leftStep(현재 할당량)을 남아있는 요소들의 개수로 바꾼다.
     if (cnt > arr1.length - leftIdx) leftStep = arr1.length - leftIdx;
     if (cnt > arr2.length - rightIdx) rightStep = arr2.length - rightIdx;
 
     if (arr1[leftIdx + leftStep - 1] < arr2[rightIdx + rightStep - 1]) {
       leftIdx = leftIdx + leftStep;
-
+      // -1을 해주는 이유는
+      // 처리가 끝나면 해당 배열에서 건너뛴 만큼을 k에서 빼준다.
+      // 건너뛰었다는 의미는 숫자가 작아서 넘어간다는 말이다. k번째로 작은 수를 찾아야 하기 떄문.
+      // arr1과 arr2의 진행되는 인덱스의 숫자를 비교해서 작은 쪽의 인덱스 값을 더해준다.
+      // 두 배열의 현재 검사 요소 위치를 비교해서, 그 값이 작은 배열은 비교한 위치 앞에 있는 요소들을 모두 후보군에서 제외시킨다.
       k = k - leftStep;
     } else {
       rightIdx = rightIdx + rightStep;
       k = k - rightStep;
     }
   }
-
+  // 마지막에 두 수 중에 큰 수를 출력
   leftMax = arr1[leftIdx - 1] || -1;
   rightMax = arr2[rightIdx - 1] || -1;
 
