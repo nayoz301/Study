@@ -885,3 +885,18 @@ const getItemFromTwoSortedArrays = function (arr1, arr2, k) {
 
   return Math.max(leftMax, rightMax);
 };
+//Q19 Longest Prefix which is also Suffix
+function LPS(str) {
+  let resultStr = "";
+  let half = parseInt(str.length / 2);
+  for (let i = 0; i <= half; i++) {
+    let prefix = str.slice(0, i);
+    let suffix = str.slice(str.length - i);
+
+    if (prefix === suffix) {
+      resultStr = prefix;
+    }
+  }
+
+  return resultStr.length;
+}
