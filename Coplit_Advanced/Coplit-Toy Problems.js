@@ -902,6 +902,10 @@ function LPS(str) {
   return resultStr.length;
 }
 
+/*
+rightIdx가 str.length의 절반 이상이 될 때까지 rightIdx의 카운트를 계속해준다.
+
+*/
 const LPS = function (str) {
   // lps[i]는 0부터 i까지의 부분 문자열, 즉 str.slice(0, i + 1)에서 lps의 길이를 저장한다.
   const lps = Array(str.length);
@@ -945,4 +949,36 @@ const LPS = function (str) {
   }
   const res = lps[lps.length - 1];
   return res > str.length / 2 ? Math.floor(str.length / 2) : res;
+};
+
+//Q20 Merge Sort
+const merge = function (left, right) {
+  // 정렬된 왼쪽과 오른쪽 배열을 받아서 하나로 합치는 순수한 함수
+  // left, right already sorted
+  const result = [];
+  while (left.length !== 0 && right.length !== 0) {
+    left[0] <= right[0]
+      ? result.push(left.shift())
+      : result.push(right.shift());
+  }
+
+  return [...result, ...left, ...right]; // 아래 세줄과 같은 역할을 하는 코드
+  // if(left.length === 0) results.push(...right);
+  // if(right.length === 0) results.push(...left);
+  // return results;
+};
+
+const mergeSort = function (arr) {
+  // ending condition: length === 1 인 배열이 들어올 때, 정렬이 끝난 것.
+  if (arr.length === 1) return arr;
+
+  // 2로 나누고 내림을 해야
+  // length 가 2일 때도 안전하게 배열을 slice 할 수 있다.
+  const midIdx = Math.floor(arr.length / 2);
+  const left = arr.slice(0, midIdx);
+  const right = arr.slice(midIdx);
+
+  // 재귀로 계속해서 반으로 나누면서 length 가 1이 될때까지 쪼개고,
+  // 거꾸로 올라오면서 순수한 함수인 merge에 인자로 넣어서 다시 병합되어서 최종값을 리턴한다.
+  return merge(mergeSort(left), mergeSort(right));
 };
