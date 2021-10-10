@@ -1509,7 +1509,6 @@ function removeRoot(heap) {
   return heap;
 }
 
-// 아래 코드는 수정하지 마세요.
 const binaryHeap = function (arr) {
   return arr.reduce((heap, item) => {
     return insert(heap, item);
@@ -1525,4 +1524,17 @@ const heapSort = function (arr) {
     minHeap = removeRoot(minHeap);
   }
   return sorted;
+};
+
+//Q31
+// O(N)
+const rangeMinimum = function (arr, ranges) {
+  return ranges.map((range) => {
+    const [start, end] = range;
+    let min = Number.MAX_SAFE_INTEGER;
+    for (let i = start; i <= end; i++) {
+      if (arr[i] < min) min = arr[i];
+    }
+    return min;
+  });
 };
