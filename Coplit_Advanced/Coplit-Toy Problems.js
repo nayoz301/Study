@@ -701,6 +701,26 @@ Node.prototype.addChild = function (child) {
 
 //Q13
 const insertionSort = function (arr) {
+  let sorted = [arr[0]];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] > sorted[sorted.length - 1]) {
+      sorted.push(arr[i]);
+    } else {
+      for (let j = 0; j < i; j++) {
+        if (arr[i] < sorted[j]) {
+          // let left = sorted.slice(0,j);
+          // let right = sorted.slice(j);
+          // sorted = left.concat(arr[i],right)
+          sorted.splice(j, 0, arr[i]);
+          break;
+        }
+      }
+    }
+  }
+  return sorted;
+};
+
+const insertionSort = function (arr) {
   //말 그대로 빈 배열에 삽입하며 정렬하는 방식을 의미함.
   //우선 빈 배열에 첫번째 숫자를 담고 그 숫자를 기준으로 삽입한다.
   let sorted = [arr[0]]; //배열에 담아주는 거 잊지 말기!
