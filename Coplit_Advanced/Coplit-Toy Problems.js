@@ -972,6 +972,7 @@ const LPS = function (str) {
 };
 
 //Q20 Merge Sort
+//이 방법도 괜찮은데 조금 느리다. 상대적으로 빠른 방법 밑에
 const merge = function (left, right) {
   // 정렬된 왼쪽과 오른쪽 배열을 받아서 하나로 합치는 순수한 함수
   // left, right already sorted
@@ -1001,6 +1002,47 @@ const mergeSort = function (arr) {
   // 재귀로 계속해서 반으로 나누면서 length 가 1이 될때까지 쪼개고,
   // 거꾸로 올라오면서 순수한 함수인 merge에 인자로 넣어서 다시 병합되어서 최종값을 리턴한다.
   return merge(mergeSort(left), mergeSort(right));
+};
+
+//Q20 Merge sort 조금 더 빠르게
+const merge = function (left, right) {
+  let merged = [];
+  let leftIdx = 0,
+    rightIdx = 0;
+  const size = left.length + right.length;
+
+  for (let i = 0; i < size; i++) {
+    if (leftIdx >= left.length || left[leftIdx] > right[rightIdx]) {
+      //같거나 크다는 것은 이미 left에 숫자는 다 처리되어서 인덱스가 넘어갔다는 얘기
+      //left가 끝났거나 || 현재 right의 숫자보다 left의 숫자가 같거나 클 경우
+      merged.push(right[rightIdx]);
+      //left가 끝난 경우이기 때문에 right을 처리해준다.
+      rightIdx++;
+      //right의 인덱스를 올려준다.
+    } else if (rightIdx >= right.length || left[leftIdx] <= right[rightIdx]) {
+      // right이 끝났거나 || 현재 left의 숫자보다 right의 숫자가 같거나 클 경우
+      merged.push(left[leftIdx]);
+      // right이 끝난 경우이거나, 작은 수부터 정렬해야하니 left를 푸쉬
+      leftIdx++;
+      //left의 인덱스를 올려준다.
+    }
+  }
+
+  return merged;
+};
+
+const mergeSort = function (arr) {
+  if (arr.length < 2) return arr;
+  const middle = parseInt(arr.length / 2);
+  //매 회차마다 반으로 나눠서 구역을 left right 두개로 나눈다.
+  const left = mergeSort(arr.slice(0, middle));
+  const right = mergeSort(arr.slice(middle));
+  const merged = merge(left, right);
+  /*
+  가장 첫 두 개의 array를 재귀로 들어가서 left right의 el이 하나씩 남을 때까지 들어가서
+  정렬 후에 리턴 -> 쭉 나와서 가장 마지막에 합친 배열을 리턴
+  */
+  return merged;
 };
 
 //Q21
