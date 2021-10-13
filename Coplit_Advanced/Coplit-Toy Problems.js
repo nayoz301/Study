@@ -1012,7 +1012,8 @@ const merge = function (left, right) {
   const size = left.length + right.length;
 
   for (let i = 0; i < size; i++) {
-    if (leftIdx >= left.length || left[leftIdx] > right[rightIdx]) {
+    //<= >= 부등호에 이꼴 붙여주는거 주의
+    if (leftIdx >= left.length || left[leftIdx] >= right[rightIdx]) {
       //같거나 크다는 것은 이미 left에 숫자는 다 처리되어서 인덱스가 넘어갔다는 얘기
       //left가 끝났거나 || 현재 right의 숫자보다 left의 숫자가 같거나 클 경우
       merged.push(right[rightIdx]);
