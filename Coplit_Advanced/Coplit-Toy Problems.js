@@ -1798,3 +1798,32 @@ const LIS = function (arr) {
   // 첫 번째 요소부터 시작하는 LIS를 검사하는 효과를 갖는다.
   return pickOrNot(0, Number.MAX_SAFE_INTEGER);
 };
+
+//Q33
+//dynamic programming with memoization O(N^2)
+const LIS = function (arr) {
+  // memo[i]는 i부터 시작하는 LIS의 길이를 저장
+  const memo = Array(arr.length).fill(-1);
+  // 마지막 요소부터 시작하는 LIS는 1이 유일하다.
+  memo[memo.length - 1] = 1;
+  const calculateLIS = (idx) => {
+    if (memo[idx] !== -1) return memo[idx];
+
+    let max = 1;
+    for (let i = idx + 1; i < arr.length; i++) {
+      const len = calculateLIS(i);
+      // idx와 i가 연결되지 않을 수도 있다.
+      if (arr[idx] < arr[i]) {
+        // i부터 시작하는 LIS를 연결할 수 있는 경우
+        max = Math.max(max, len + 1);
+      }
+      // i부터 시작하는 LIS가 더 길 수도 있다.
+      // idx부터 시작하는 LIS를 구해야 하므로, 무시한다.
+    }
+    memo[idx] = max;
+    return memo[idx];
+  };
+  calculateLIS(0);
+  // 가장 긴 길이를 구한다.
+  return Math.max(...memo);
+};
