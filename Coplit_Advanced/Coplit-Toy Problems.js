@@ -1827,3 +1827,23 @@ const LIS = function (arr) {
   // 가장 긴 길이를 구한다.
   return Math.max(...memo);
 };
+
+//Q33
+// dynamic programming with tabulation: O(N^2)
+const LIS = function (arr) {
+  const N = arr.length;
+  // lis[i]는 i에서 끝나는 LIS의 길이를 저장
+  // 최소한 각 요소 하나로 LIS를 만들 수 있으므로 1로 초기화한다.
+  const lis = Array(N).fill(1);
+  for (let i = 1; i < N; i++) {
+    // i에서 끝나는 LIS의 길이
+    for (let j = 0; j < i; j++) {
+      // i 이전의 인덱스만 검사하면 된다.
+      // i는 1부터 시작하므로, 짧은 길이부터 검사한다. (bottom-up 방식)
+      if (arr[i] > arr[j] && lis[i] < lis[j] + 1) {
+        lis[i] = lis[j] + 1;
+      }
+    }
+  }
+  return Math.max(...lis);
+};
