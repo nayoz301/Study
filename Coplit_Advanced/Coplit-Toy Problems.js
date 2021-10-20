@@ -1847,3 +1847,34 @@ const LIS = function (arr) {
   }
   return Math.max(...lis);
 };
+
+//Q34
+// 시간복잡도 O(2^N)
+// 두 문자열의 길이(m, n)가 같다고 가정할 경우에 한함
+// 최악의 경우는 일치하는 문자가 전혀 없을 경우이고 이때는 한쪽 문자열의 끝까지 비교해야 하므로 2^n 만큼의 시간이 걸린다.
+const LCS = function (str1, str2) {
+  // str1.slice 또는 str1.substring은 O(N)만큼의 오버헤드가 추가된다.
+  // 비교는 인덱스만 알아도 충분하다.
+  // left: str1의 인덱스, right: str2의 인덱스, len: 현재까지 만든 LCS의 길이
+  const compareOneByOne = (left, right) => {
+    // base case
+    // 더 이상 비교가 불가능한 경우
+    if (left === str1.length || right === str2.length) return 0;
+
+    // 일치하는 문자가 있는 경우
+    // 인덱스를 공통으로 이동하고, 길이를 1개 추가한다.
+    if (str1[left] === str2[right]) {
+      return 1 + compareOneByOne(left + 1, right + 1);
+    }
+
+    // 일치하는 문자가 없는 경우
+    // 길이는 그대로고, str1과 str2 중에서 어느 쪽의 문자를 포기할지 정해야한다.
+    // 양쪽다 가능성이 있으므로 양쪽을 모두 탐색하고 그 중 큰 값을 선택한다.
+    return Math.max(
+      compareOneByOne(left + 1, right), //
+      compareOneByOne(left, right + 1)
+    );
+  };
+
+  return compareOneByOne(0, 0);
+};
