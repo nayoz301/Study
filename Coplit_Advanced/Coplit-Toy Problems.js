@@ -1914,3 +1914,34 @@ const LCS = function (str1, str2) {
 
   return compareOneByOne(0, 0, 0);
 };
+
+//Q34
+// dynamic programming으로 O(M * N)
+// tabulation(테이블에 정리)을 활용해 bottom-up 방식으로 해결
+const LCS = function (str1, str2) {
+  const M = str1.length;
+  const N = str2.length;
+  // table[i][j]는 str1.slice(0, i)와 str2.slice(0, j)의 LCS를 저장
+  // str1.slice(0, i)는 0부터 i 바로 직전까지를 의미함 (i까지가 아님에 주의하기)
+  const table = [];
+  for (let i = 0; i < M + 1; i++) table.push(Array(N + 1).fill(-1));
+
+  for (let i = 0; i <= M; i++) {
+    for (let j = 0; j <= N; j++) {
+      if (i === 0 || j === 0) {
+        // i 또는 j가 0인 경우, 한쪽 문자열이 길이가 0이라는 의미이다.
+        // LCS가 존재할 수 없으므로, 0을 저장한다.
+        table[i][j] = 0;
+      } else if (str1[i - 1] === str2[j - 1]) {
+        // 두 문자가 같은 경우
+        // 양쪽 문자열의 인덱스가 한 개씩 이전인 상태에서 만들 수 있는 LCS의 길이보다 1만큼 더 길다.
+        table[i][j] = 1 + table[i - 1][j - 1];
+      } else {
+        // 두 문자가 같지 않은 경우
+        // 둘 중 한쪽을 포기하는 경우에 만들 수 있는 LCS의 길이를 따른다.
+        table[i][j] = Math.max(table[i - 1][j], table[i][j - 1]);
+      }
+    }
+  }
+  return table[M][N];
+};
