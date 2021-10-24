@@ -1945,3 +1945,26 @@ const LCS = function (str1, str2) {
   }
   return table[M][N];
 };
+
+//Q35
+const uglyNumbers = function (n) {
+  const isUgly = (num) => {
+    num = decompose(num, 2);
+    num = decompose(num, 3);
+    num = decompose(num, 5);
+    return num === 1;
+  };
+
+  const decompose = (num, factor) => {
+    while (num % factor === 0) num = num / factor;
+    return num;
+  };
+
+  let num = 0;
+  let cnt = 0;
+  while (n > cnt) {
+    num++;
+    if (isUgly(num)) cnt++;
+  }
+  return num;
+};
