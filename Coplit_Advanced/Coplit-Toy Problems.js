@@ -2010,6 +2010,28 @@ const uglyNumbers = function (n) {
 };
 
 //Q37
+/*O(2^M * N)) 좀 오래걸리지만 기본 풀이
+6을 만드는 방법 중 [1, 5]와 [5, 1]을 중복해서 세면 안 되기 때문에.
+동전을 순서대로 사용한다.*/
+const coinChange = function (total, coins) {
+  const makeChageFrom = (left, idx) => {
+    if (left === 0) return 1;
+
+    let cnt = 0;
+    // 지금 사용하고 있는 동전부터만 고려한다.
+    for (let i = idx; i < coins.length; i++) {
+      if (left - coins[i] >= 0) {
+        cnt = cnt + makeChageFrom(left - coins[i], i);
+      }
+    }
+
+    return cnt;
+  };
+  // 0번째 동전부터 사용한다.
+  return makeChageFrom(total, 0);
+};
+
+//Q37
 //dynamic programming with memoization: O(M * N)
 const coinChange = function (total, coins) {
   // memo[i][j]는 i만큼의 금액을 coins[j]부터 ~ coins[coins.length - 1]까지 사용하여 만들 수 있는 경우의 수를 저장
