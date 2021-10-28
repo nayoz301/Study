@@ -2057,3 +2057,34 @@ const coinChange = function (total, coins) {
 
   return makeChageFrom(total, 0);
 };
+
+//Q37
+//dynamic programming with tabulation: O(M * N)
+const coinChange = function (total, coins) {
+  // table[i][j]는 coins[j]까지 사용해서 i만큼의 금액을 만들 수 있는 경우의 수를 저장
+  const table = [];
+  for (let i = 0; i < total + 1; i++) table.push(Array(coins.length).fill(0));
+  // 모든 경우에 0을 만들 수 있는 경우는 1 (base case)
+  for (let i = 0; i < coins.length; i++) table[0][i] = 1;
+
+  for (let amount = 1; amount <= total; amount++) {
+    // 작은 금액부터 차례대로 경우의 수를 구한다. (bottom-up)
+    for (let idx = 0; idx < coins.length; idx++) {
+      let coinIncluded = 0;
+      if (amount - coins[idx] >= 0) {
+        coinIncluded = table[amount - coins[idx]][idx];
+      }
+
+      let coinExcluded = 0;
+      if (idx >= 1) {
+        // 동전을 순서대로 검사하고 있기 때문에, 바로 직전의 경우만 고려하면 된다.
+        // 단, 0번째 동전은 직전이 없으므로 제외한다.
+        coinExcluded = table[amount][idx - 1];
+      }
+
+      table[amount][idx] = coinIncluded + coinExcluded;
+    }
+  }
+
+  return table[total][coins.length - 1];
+};
