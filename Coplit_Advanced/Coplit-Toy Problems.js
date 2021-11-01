@@ -2144,6 +2144,36 @@ const decompression = function (image) {
 };
 
 //Q40
+//naive 시간복잡도 O(N^3)
+//이해는 쉬우나 너무 오래걸린다는 단점이 있다.
+function longestPalindrome(str) {
+  if (str.length <= 1) return str.length;
+
+  const checkPalindrome = function (str) {
+    const half = parseInt(str.length / 2);
+    for (let i = 0; i < half; i++) {
+      if (str[i] !== str[str.length - 1 - i]) return false;
+    }
+    return true;
+  };
+
+  // 길이가 긴 순서대로 부분 문자열을 만들어 검사한다.
+  for (let len = str.length; len >= 1; len--) {
+    // 길이 len인 부분 문자열들의 시작 인덱스를 구한다.
+    // 예. 전체 길이가 100이고, 부분 문자열의 길이가 10인 경우,
+    // 부분 문자열 (시작인덱스 ~ 마지막 인덱스)
+    //  90 ~ 99, 89 ~ 98, 88 ~ 97, ..., 1 ~ 10, 0 ~ 9
+    for (let startIdx = str.length - len; startIdx >= 0; startIdx--) {
+      // slice의 특성을 고려한 마지막 인덱스 + 1 을 저장
+      const endIdx = startIdx + len;
+      const subStr = str.substring(startIdx, endIdx);
+      const result = checkPalindrome(subStr);
+      if (result === true) return len;
+    }
+  }
+}
+
+//Q40
 //Longest palindrome
 function longestPalindrome(str) {
   if (str.length < 2) return str.length;
