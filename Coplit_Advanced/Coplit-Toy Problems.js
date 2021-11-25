@@ -2339,3 +2339,23 @@ const subsetSum = function (set, bound) {
   });
   return max;
 };
+
+//Q46
+// naive solution: O(2^N)
+const knapsack = function (weight, items) {
+  const LENGTH = items.length;
+  function pickOrNot(idxToCheck, value, left) {
+    if (idxToCheck === LENGTH) return value;
+
+    const [wt, v] = items[idxToCheck];
+
+    if (wt > left) return pickOrNot(idxToCheck + 1, value, left);
+
+    return Math.max(
+      pickOrNot(idxToCheck + 1, value + v, left - wt),
+      pickOrNot(idxToCheck + 1, value, left)
+    );
+  }
+
+  return pickOrNot(0, 0, weight);
+};
